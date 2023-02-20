@@ -1,3 +1,5 @@
+package RoomService.actuators;
+
 public class RollerBlindsImpl implements RollerBlinds {
     private boolean isOpen = false;
     private boolean isClosed = true;

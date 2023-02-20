@@ -1,6 +1,6 @@
 package RoomService.actuators;
 
-public interface Light {
+public interface LightLed {
 
     void turnOn();
 

@@ -1,3 +1,5 @@
+package RoomService.actuators;
+
 public interface RollerBlinds {
     
         void open();
