@@ -1,4 +1,4 @@
-package com.example.remoteblinkapp;
+package com.example.roomapp;
 
 import org.junit.Test;
 
