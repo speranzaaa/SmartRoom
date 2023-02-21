@@ -1,5 +1,7 @@
-package com.example.remoteblinkapp;
+package com.example.roomapp;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -9,29 +11,32 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
+
+import com.google.android.material.slider.Slider;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 @SuppressLint("MissingPermission")
-public class LedSwitchActivity extends AppCompatActivity {
+public class ControllerActivity extends AppCompatActivity {
 
     private OutputStream bluetoothOutputStream;
     private Button remoteButton;
+    private Slider slider;
     private boolean ledState;
     private BluetoothClientConnectionThread connectionThread;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_led_switch);
-        ledState = false;
+        setContentView(R.layout.activity_controller);
+        ledState = true;
         initUI();
     }
 
@@ -39,13 +44,38 @@ public class LedSwitchActivity extends AppCompatActivity {
         remoteButton = findViewById(R.id.remotebutton);
         remoteButton.setBackgroundColor(Color.LTGRAY);
         remoteButton.setEnabled(false);
-        remoteButton.setOnClickListener((v) -> sendMessage());
+        remoteButton.setOnClickListener((v) -> sendLightMessage());
+        slider = findViewById(R.id.discreteSlider);
+        slider.setEnabled(false);
+        slider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onStartTrackingTouch(@NonNull Slider slider) {
+            }
+
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onStopTrackingTouch(@NonNull Slider slider) {
+                new Thread(() -> {
+                    try {
+                        Integer value = Math.round(slider.getValue());
+                        String message = "{\"angle\":" + Integer.toString(Math.round(slider.getValue())) + "}\n";
+                        Log.e(C.TAG, message);
+                        bluetoothOutputStream.write(message.getBytes(StandardCharsets.UTF_8));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }
+        });
     }
 
-    private void sendMessage() {
+    private void sendLightMessage() {
         new Thread(() -> {
             try {
-                String message = ledState ? "off\n" : "on\n";
+                Integer ledStateInt = ledState ? 1 : 0;
+                String message = "{\"light\":" + ledStateInt.toString() + "}\n";
+                Log.e(C.TAG, message);
                 bluetoothOutputStream.write(message.getBytes(StandardCharsets.UTF_8));
                 ledState = !ledState;
                 runOnUiThread(() -> remoteButton.setBackgroundColor(ledState? Color.GREEN : Color.RED));
@@ -75,7 +105,8 @@ public class LedSwitchActivity extends AppCompatActivity {
         }
         runOnUiThread(() -> {
             remoteButton.setEnabled(true);
-            remoteButton.setBackgroundColor(Color.RED);
+            remoteButton.setBackgroundColor(Color.GREEN);
+            slider.setEnabled(true);
         });
     }
 
