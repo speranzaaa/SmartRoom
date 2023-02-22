@@ -1,30 +1,22 @@
 #include "LightTask.hpp"
 #include <Arduino.h>
-#include <PubSubClient.h>
-#include <ArduinoJson.h>
-#include "../utils/ConnectionUtils.hpp"
 #include "../sensors/LightSensor.h"
+#include "../utils/Config.hpp"
 #define MSG_BUFFER_SIZE 50
 
-extern PubSubClient client;
-extern SemaphoreHandle_t mutex;
+extern SemaphoreHandle_t dayMutex;
+extern volatile bool isDay;
 
-void LightTask(void* lightSensor) {
-    const char* topic = "SensorBoard";
-    LightSensor* sensor = (LightSensor*)lightSensor;
+void LightTask(void* param) {
+    LightSensor* lightSensor = new LightSensor(LIGHT_SENSOR_PIN);
     for(;;) {
-        char msg[MSG_BUFFER_SIZE];
-        DynamicJsonDocument doc(128);
-        doc["lightSensor"] = sensor->isDay();
-        serializeJson(doc, msg);
-        xSemaphoreTake(mutex, 1000);
-        if (!client.connected()) {
-            reconnect(&client, topic);
+        while(xSemaphoreTake(dayMutex, 100) == pdFALSE){
+            Serial.println("mutex not taken, delaying for 1 sec");
+            delay(1000);
         }
-        // Send msg via mqtt
-        client.loop();
-        client.publish(topic, msg);
-        xSemaphoreGive(mutex);
+        isDay = lightSensor->isDay();
+        Serial.println("Light sensor data updated");
+        xSemaphoreGive(dayMutex);
         delay(500);
     }
 };

@@ -2,14 +2,13 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include "./tasks/LightTask.hpp"
-#include "./sensors/LightSensor.h"
-// #include "./utils/ConnectionUtils.hpp"
+#include <ArduinoJson.h>
 #define MSG_BUFFER_SIZE  50
 
 /* wifi network info */
 
-const char* ssid = "LittleBarfly";
-const char* password = "303HotelLittleBarfly";
+const char* ssid = "POCO X3 NFC";
+const char* password = "12345678";
 
 /* MQTT server address */
 const char* mqtt_server = "broker.mqtt-dashboard.com";
@@ -20,7 +19,7 @@ const char* topic = "esiot-2022";
 /* MQTT client management */
 
 WiFiClient espClient;
-PubSubClient client(espClient);
+PubSubClient* client = new PubSubClient(espClient);
 
 
 unsigned long lastMsgTime = 0;
@@ -28,43 +27,100 @@ char msg[MSG_BUFFER_SIZE];
 
 TaskHandle_t Task1;
 TaskHandle_t Task2;
-SemaphoreHandle_t mutex;
+SemaphoreHandle_t dayMutex;
+SemaphoreHandle_t presenceMutex;
+volatile bool isDay = false;
+volatile bool isPresence = false;
 
+void setup_wifi() {
+
+    Serial.println(String("Connecting to ") + ssid);
+    Serial.flush();
+
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(ssid, password);
+
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+
+    Serial.println("");
+    Serial.println("WiFi connected");
+    Serial.println("IP address: ");
+    Serial.println(WiFi.localIP());
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+    Serial.println(String("Message arrived on [") + topic + "] len: " + length );
+}
 
 void setup() {
-    // setup_wifi(ssid, password);
-    // randomSeed(micros());
-    // client.setServer(mqtt_server, 1883);
-    // client.setCallback(callback);
     Serial.begin(9600);
-    LightSensor* lightSensor = new LightSensor(5);
-    mutex = xSemaphoreCreateMutex();
-    xTaskCreatePinnedToCore(LightTask, "FirstTask", 10000, (void*)lightSensor, 1, &Task1, 0);
+    setup_wifi();
+    randomSeed(micros());
+    client->setServer(mqtt_server, 1883);
+    client->setCallback(callback);
+    dayMutex = xSemaphoreCreateMutex();
+    presenceMutex = xSemaphoreCreateMutex();
+    if (dayMutex == NULL || presenceMutex == NULL) {
+        Serial.println("failed to create mutex, quitting");
+        exit(1);
+    }
+    xTaskCreatePinnedToCore(LightTask, "FirstTask", 10000, NULL, 1, &Task1, 0);
+    delay(100);
+    // xTaskCreatePinnedToCore(LightTask, "FirstTask", 10000, (void*)mutexPointer, 1, &Task2, 1);
     // xTaskCreatePinnedToCore(SecondTaskCode, "SecondTask", 10000, NULL, 1, &Task2, 1);
     // delay(500);
 }
 
+// Main loop that reads values of isDay and isDetected and sends via mqtt
 void loop() {
-    Serial.print("Main loop running on core ");
-    Serial.println(xPortGetCoreID());
-    Serial.flush();
+    bool currDay;
+    bool currPresence;
+    while(xSemaphoreTake(dayMutex, 100) == pdFALSE){
+        // Serial.println("mutex not taken, delaying for 1 sec");
+        delay(1000);
+    }
+    currDay = isDay;
+    xSemaphoreGive(dayMutex);
+    while(xSemaphoreTake(presenceMutex, 100) == pdFALSE){
+        // Serial.println("mutex not taken, delaying for 1 sec");
+        delay(1000);
+    }
+    currPresence = isPresence;
+    xSemaphoreGive(presenceMutex);
+    Serial.println("Sensor data obtained, publishing to topic");
+    char msg[MSG_BUFFER_SIZE];
+    DynamicJsonDocument doc(128);
+    doc["isDay"] = currDay;
+    doc["isPresence"] = currPresence;
+    serializeJson(doc, msg);
+    serializeJson(doc, Serial);
+    while (!client->connected()) {
+        Serial.print("Attempting MQTT connection...");
+        Serial.flush();
+        
+        // Create a random client ID
+        String clientId = String("esiot-2122-client-")+String(random(0xffff), HEX);
+
+        // Attempt to connect
+        if (client->connect(clientId.c_str())) {
+            Serial.println("connected");
+            // ... and resubscribe
+            client->subscribe(topic);
+        } else {
+            Serial.print("failed, rc=");
+            Serial.println(client->state());
+            // Serial.println(" try again in 5 seconds");
+            // Wait 5 seconds before retrying
+            delay(500);
+        }
+    }
+    client->loop();
+    client->publish(topic, msg);
+    // Serial.print("Main loop running on core ");
+    // Serial.println(xPortGetCoreID());
+    // Serial.flush();
     delay(1000);
 }
-
-
-// void loop() {
-//     if (!client.connected()) {
-//         reconnect();
-//     }
-//     client.loop();
-//     unsigned long now = millis();
-//     if (now - lastMsgTime > 10000) {
-//         lastMsgTime = now;
-//         value++;
-//         /* creating a msg in the buffer */
-//         snprintf (msg, MSG_BUFFER_SIZE, "hello world #%ld", value);
-//         Serial.println(String("Publishing message: ") + msg);
-//         /* publishing the msg */
-//         client.publish(topic, msg);  
-//     }
-// }
