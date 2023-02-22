@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include "./tasks/LightTask.hpp"
+#include "./utils/ConnectionUtils.hpp"
 #define MSG_BUFFER_SIZE  50
 
 /* wifi network info */
@@ -38,15 +39,13 @@ volatile int count = 0;
 // }
 
 void setup() {
-    // setup_wifi();
-    // randomSeed(micros());
+    setup_wifi(ssid, password);
+    randomSeed(micros());
     client.setServer(mqtt_server, 1883);
     client.setCallback(callback);
     Serial.begin(9600);
     mutex = xSemaphoreCreateMutex();
-    // xSemaphoreGive(&semaphore);
     // xTaskCreatePinnedToCore(lightTaskCode, "FirstTask", 10000, (void*)lightTask, 1, &Task1, 0);
-    delay(500);
     // xTaskCreatePinnedToCore(SecondTaskCode, "SecondTask", 10000, NULL, 1, &Task2, 1);
     // delay(500);
 }
@@ -59,25 +58,6 @@ void loop() {
 }
 
 
-void setup_wifi() {
-
-    delay(10);
-
-    Serial.println(String("Connecting to ") + ssid);
-
-    WiFi.mode(WIFI_STA);
-    WiFi.begin(ssid, password);
-
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
-    }
-
-    Serial.println("");
-    Serial.println("WiFi connected");
-    Serial.println("IP address: ");
-    Serial.println(WiFi.localIP());
-}
 
 /* MQTT subscribing callback */
 
