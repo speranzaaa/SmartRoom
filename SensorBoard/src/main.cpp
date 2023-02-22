@@ -30,7 +30,7 @@ TaskHandle_t Task2;
 SemaphoreHandle_t dayMutex;
 SemaphoreHandle_t presenceMutex;
 volatile bool isDay = false;
-volatile bool isPresence = false;
+volatile bool isPresenceDetected = false;
 
 void setup_wifi() {
 
@@ -67,6 +67,7 @@ void setup() {
         Serial.println("failed to create mutex, quitting");
         exit(1);
     }
+    // Create light sensor task on core 0
     xTaskCreatePinnedToCore(LightTask, "FirstTask", 10000, NULL, 1, &Task1, 0);
     delay(100);
     // xTaskCreatePinnedToCore(LightTask, "FirstTask", 10000, (void*)mutexPointer, 1, &Task2, 1);
@@ -74,7 +75,7 @@ void setup() {
     // delay(500);
 }
 
-// Main loop that reads values of isDay and isDetected and sends via mqtt
+// Main loop that reads values of isDay and isPresenceDetected and sends via mqtt
 void loop() {
     bool currDay;
     bool currPresence;
@@ -88,7 +89,7 @@ void loop() {
         // Serial.println("mutex not taken, delaying for 1 sec");
         delay(1000);
     }
-    currPresence = isPresence;
+    currPresence = isPresenceDetected;
     xSemaphoreGive(presenceMutex);
     Serial.println("Sensor data obtained, publishing to topic");
     char msg[MSG_BUFFER_SIZE];
