@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include "./tasks/LightTask.hpp"
+#include "./tasks/PirTask.hpp"
 #include <ArduinoJson.h>
 #define MSG_BUFFER_SIZE  50
 
@@ -68,9 +69,9 @@ void setup() {
         exit(1);
     }
     // Create light sensor task on core 0
-    xTaskCreatePinnedToCore(LightTask, "FirstTask", 10000, NULL, 1, &Task1, 0);
+    xTaskCreatePinnedToCore(LightTask, "LightTask", 10000, NULL, 1, &Task1, 0);
     delay(100);
-    // xTaskCreatePinnedToCore(LightTask, "FirstTask", 10000, (void*)mutexPointer, 1, &Task2, 1);
+    xTaskCreatePinnedToCore(PirTask, "PirTask", 10000, NULL, 1, &Task2, 0);
     // xTaskCreatePinnedToCore(SecondTaskCode, "SecondTask", 10000, NULL, 1, &Task2, 1);
     // delay(500);
 }

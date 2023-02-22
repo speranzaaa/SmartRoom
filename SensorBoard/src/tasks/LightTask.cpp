@@ -2,7 +2,6 @@
 #include <Arduino.h>
 #include "../sensors/LightSensor.h"
 #include "../utils/Config.hpp"
-#define MSG_BUFFER_SIZE 50
 
 extern SemaphoreHandle_t dayMutex;
 extern volatile bool isDay;
