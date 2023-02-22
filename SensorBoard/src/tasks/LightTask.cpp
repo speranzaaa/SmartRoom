@@ -4,15 +4,16 @@
 #include <ArduinoJson.h>
 #include "../utils/ConnectionUtils.hpp"
 #include "../sensors/LightSensor.h"
+#define MSG_BUFFER_SIZE 50
 
 extern PubSubClient client;
 extern SemaphoreHandle_t mutex;
 
 void LightTask(void* lightSensor) {
-    char* topic = "SensorBoard";
+    const char* topic = "SensorBoard";
     LightSensor* sensor = (LightSensor*)lightSensor;
     for(;;) {
-        String msg;
+        char msg[MSG_BUFFER_SIZE];
         DynamicJsonDocument doc(128);
         doc["lightSensor"] = sensor->isDay();
         serializeJson(doc, msg);
@@ -21,6 +22,8 @@ void LightTask(void* lightSensor) {
             reconnect(&client, topic);
         }
         // Send msg via mqtt
+        client.loop();
+        client.publish(topic, msg);
         xSemaphoreGive(mutex);
         delay(500);
     }
