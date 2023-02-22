@@ -2,7 +2,8 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include "./tasks/LightTask.hpp"
-#include "./utils/ConnectionUtils.hpp"
+#include "./sensors/LightSensor.h"
+// #include "./utils/ConnectionUtils.hpp"
 #define MSG_BUFFER_SIZE  50
 
 /* wifi network info */
@@ -24,28 +25,21 @@ PubSubClient client(espClient);
 
 unsigned long lastMsgTime = 0;
 char msg[MSG_BUFFER_SIZE];
-int value = 0;
 
 TaskHandle_t Task1;
 TaskHandle_t Task2;
 SemaphoreHandle_t mutex;
 
-portMUX_TYPE lockTest = portMUX_INITIALIZER_UNLOCKED;
-volatile int count = 0;
-
-// void lightTaskCode(void* taskToExecute) {
-//     ((LightTask*)taskToExecute)->ToExecute();
-//     delay(100);
-// }
 
 void setup() {
-    setup_wifi(ssid, password);
-    randomSeed(micros());
-    client.setServer(mqtt_server, 1883);
-    client.setCallback(callback);
+    // setup_wifi(ssid, password);
+    // randomSeed(micros());
+    // client.setServer(mqtt_server, 1883);
+    // client.setCallback(callback);
     Serial.begin(9600);
+    LightSensor* lightSensor = new LightSensor(5);
     mutex = xSemaphoreCreateMutex();
-    // xTaskCreatePinnedToCore(lightTaskCode, "FirstTask", 10000, (void*)lightTask, 1, &Task1, 0);
+    xTaskCreatePinnedToCore(LightTask, "FirstTask", 10000, (void*)lightSensor, 1, &Task1, 0);
     // xTaskCreatePinnedToCore(SecondTaskCode, "SecondTask", 10000, NULL, 1, &Task2, 1);
     // delay(500);
 }
@@ -55,14 +49,6 @@ void loop() {
     Serial.println(xPortGetCoreID());
     Serial.flush();
     delay(1000);
-}
-
-
-
-/* MQTT subscribing callback */
-
-void callback(char* topic, byte* payload, unsigned int length) {
-    Serial.println(String("Message arrived on [") + topic + "] len: " + length );
 }
 
 
