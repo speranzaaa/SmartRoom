@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Dashboard</title>
+    <link rel="icon" href="res/dashboard-icon.svg">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/switchToggle.css">
+    <link rel="stylesheet" href="css/slider.css">
+</head>
+<body>
+    <header>
+        <img src="res/dashboard-icon.svg" alt="dashboard icon">
+        <h1>Dashboard</h1>
+        <!-- <nav>
+            <a href="">Lights</a>
+            <a href="">Roller Blinds</a>
+        </nav> -->
+    </header>
+    <main>
+        <div id="controls" class="section">
+            <div id="lights-control" class="control card">
+                <h2>Lights</h2>
+                <input type="checkbox" id="lights-switch" class="toggle-switch">
+                <label for="lights-switch" class="toggle-switch">On/Off:</label>
+            </div>
+            <div id="roller-blinds-control" class="control card">
+                <h2>Roller blinds</h2>
+                <div class="slider-container">
+                    <label for="roller-blinds-slider" class="slider">Open/Close:</label>
+                    <input type="range" id="roller-blinds-slider" min="0" max="100" value="0" class="slider">
+                </div>
+            </div>
+        </div>
+        <div id="activities" class="section">
+            <div id="lights-activity" class="activity card">
+                <h2>Lights activity</h2>
+                <ul>
+                    <li>On - 10:09 / Off - 11:23</li>
+                    <li>On - 14:19 / Off - 14:21</li>
+                    <li>On - 15:00 / Off - 16:03</li>
+                    <li>On - 18:47 / Off - 19:00</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
