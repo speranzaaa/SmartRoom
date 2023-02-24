@@ -22,6 +22,13 @@ dependencies {
 
     // This dependency is used by the application.
     implementation("com.google.guava:guava:30.1.1-jre")
+
+    // Vertx dependencies used by the application
+    implementation("io.vertx:vertx-core:4.3.8")
+    implementation("io.vertx:vertx-web:4.3.8")
+    implementation("io.vertx:vertx-web-client:4.3.8")
+    implementation("io.vertx:vertx-mqtt:4.3.8")
+
 }
 
 application {
