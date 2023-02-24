@@ -5,17 +5,17 @@
 #include "Led.h"
 
 class SmartRoom {
-  ServoMotor* servoMotor;
+  Servo* servoMotor;
   Led* led;
 
 public:
-  SmartRoom(ServoMotor* servoMotor, Led* led);
+  SmartRoom(Servo* servoMotor, Led* led);
 
   void setLedState(bool state);
   bool getLedState();
 
-  void setServoMotorOpening(int percentage);
-  int getServoMotorOpening();
+  void setServoOpening(int percentage);
+  int getServoOpening();
 
 };
 #endif

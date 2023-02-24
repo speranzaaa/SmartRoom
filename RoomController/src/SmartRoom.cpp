@@ -1,6 +1,6 @@
 #include "SmartRoom.h"
 
-SmartRoom::SmartRoom(ServoMotor* servoMotor, Led* led) : 
+SmartRoom::SmartRoom(Servo* servoMotor, Led* led) : 
   servoMotor(servoMotor), led(led){}
 
 void SmartRoom::setLedState(bool state){
@@ -16,10 +16,10 @@ bool SmartRoom::getLedState(){
   return led->isOn();
 }
 
-void SmartRoom::setServoMotorOpening(int percentage){
+void SmartRoom::setServoOpening(int percentage){
   servoMotor->move(percentage);
 }
 
-int SmartRoom::getServoMotorOpening(){
+int SmartRoom::getServoOpening(){
   return servoMotor->getOpeningPercentage();
 }
