@@ -1,4 +1,4 @@
-package RoomService.dashboardServer;
+package RoomService.dashboardServer.HTTP;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class HTTPRequestReaderFromInputStream implements HTTPRequestReader {
 	}
 
 	@Override
-	public HTTPRequestMessage getNextMsg() throws IOException {
+	public HTTPRequestMessage readHTTPRequest() throws IOException {
 		HTTPRequestMessage message = null;
 		int contentLegnth = 0;
 
