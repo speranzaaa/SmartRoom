@@ -7,10 +7,9 @@ import RoomService.dashboardServer.DashboardServer;
 
 public class App {
 	
-	final static int port = 80;
+	final static int PORT = 80;
 
     public static void main(String[] args) {
-    	DashboardServer server = new DashboardServer(port);
-    	server.runServer();
+    	new DashboardServer(PORT).start();
     }
 }
