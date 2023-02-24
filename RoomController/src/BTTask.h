@@ -12,6 +12,9 @@ class BTTask : public Task {
   SoftwareSerial* channel;
   SmartRoom* smartRoom;
 
+  int disconnectionTimer;
+  int disconectionTimerExpiry;
+
 public:
   BTTask(int rxPin, int txPin, SmartRoom* smartRoom);  
   void init(int period);  
