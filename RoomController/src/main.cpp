@@ -1,29 +1,29 @@
-#include <Arduino.h>
-#include <Servo.h>
-#include "SoftwareSerial.h"
-#include "MsgServiceBT.h"
+#include "Scheduler.h"
+#include "Servo.h"
+#include "Led.h"
+#include "SmartRoom.h"
+#include "BTTask.h"
+#include "SerialTask.h"
+#include "Utils.h"
 
-Servo servo;
-MsgServiceBT msgService(2, 3);
+Scheduler scheduler(SCHEDULER_PERIOD);
 
-void setup() {
-  servo.attach(5);
-  msgService.init();
-  Serial.begin(9600);
-  while (!Serial){}
-  servo.write(0);
+void setup(){
+  ServoMotor* servo = new ServoMotor(SERVOMOTOR_PIN);
+  Led* led = new Led(LED_PIN);
+  SmartRoom* smartRoom = new SmartRoom(servo, led);
+  SerialTask* serialTask = new SerialTask(smartRoom);
+  BTTask* BTTask = new BTTask(BT_RX_PIN, BT_TX_PIN, smartRoom);
 
-  delay(2000);
-  Serial.println("Ready.");
+  scheduler.init();
+  
+  BTTask->init(BT_PERIOD);
+  scheduler.addTask(BTTask);
+
+  serialTask->init(SERIAL_PERIOD);
+  scheduler.addTask(serialTask);
 }
 
-void loop() {
-
-  if (msgService.isMsgAvailable()) {
-    Msg* msg = msgService.receiveMsg();
-    Serial.println(msg->getContent());
-    servo.write(msg->getContent().toInt());
-  }
-
-  delay(500);
+void loop(){
+  scheduler.schedule();
 }
