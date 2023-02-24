@@ -15,7 +15,7 @@ const char* password = "12345678";
 const char* mqtt_server = "broker.mqtt-dashboard.com";
 
 /* MQTT topic */
-const char* topic = "esiot-2022";
+const char* topic = "room-sensor-board";
 
 /* MQTT client management */
 
@@ -110,7 +110,7 @@ void loop() {
         if (client->connect(clientId.c_str())) {
             Serial.println("connected");
             // ... and resubscribe
-            client->subscribe(topic);
+            // client->subscribe(topic);
         } else {
             Serial.print("failed, rc=");
             Serial.println(client->state());
