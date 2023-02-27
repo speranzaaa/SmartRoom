@@ -29,6 +29,9 @@ dependencies {
     implementation("io.vertx:vertx-web-client:4.3.8")
     implementation("io.vertx:vertx-mqtt:4.3.8")
 
+    //google Gson
+    implementation("com.google.code.gson:gson:2.10.1")
+
 }
 
 application {
