@@ -1,42 +1,47 @@
 package RoomService.dashboardServer;
 
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.io.IOException;
+import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerRequest;
+import io.vertx.ext.web.Router;
 
-public class DashboardServer {
+public class DashboardServer extends AbstractVerticle {
+	
+	private final static String RES_PATH = "src/main/resources/roomDashboard";
+	
+	private final Vertx vertix;
+	private final HttpServer server;
 	private final int port;
-	private ServerSocket socket;
-	private Map<Date, ClientHandler> clientHandlers = new HashMap<>();
+	private final Router router;
 	
-	public DashboardServer(final int port) {
+	public DashboardServer(int port) {
 		this.port = port;
-		try {
-			this.socket = new ServerSocket(this.port);
-			System.out.println("socket creato");
-		} catch (IOException e) {
-			System.out.println("Errore durante la creazione del server!");
-			e.printStackTrace();
-		}
-	}
-	
-	public void runServer() {
-		while(true) {
-			try {
-				System.out.println("In attesa di un nuovo client");
-				Socket clientSocket = this.socket.accept();
-				ClientHandler clientHandler = new ClientHandler(clientSocket);
-				clientHandlers.put(new Date(), clientHandler);
-				System.out.println("Client " + clientSocket.toString() + " accettato e gestito da " + clientHandler.toString());
-				clientHandler.start();
-			} catch (IOException e) {
-				System.out.println("Cannot accept client!");
-				e.printStackTrace();
-			}
-		}
+		this.vertix = Vertx.vertx();
+		this.server = this.vertix.createHttpServer();
+		this.router = Router.router(this.vertix);
+		this.setUpRoutes(this.router);
 	}
 
+	private void setUpRoutes(Router router) {
+		router.route().handler(ctx -> {
+			
+			String file = "";
+			
+			HttpServerRequest req = ctx.request();
+			
+			if(req.path().equals("/")) {	
+				file = "/roomDashboard.html";
+			} else if (!req.path().contains("..")) {
+			    file = req.path();
+			}
+			
+			ctx.response().sendFile(RES_PATH + file);
+		});
+	}
+
+	@Override
+	public void start() {
+		this.server.requestHandler(this.router).listen(this.port);
+	}
 }
