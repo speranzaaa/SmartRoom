@@ -1,4 +1,5 @@
 var source = new EventSource('events');
 
 source.addEventListener("message", function(event) {
-    alert(event.data)});
+    document.getElementById("status").innerHTML = event.data;
+});

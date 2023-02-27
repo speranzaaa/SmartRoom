@@ -16,7 +16,7 @@ import RoomService.actuators.Device;
 public class PersistentActivityLogger extends VolatileActivityLogger {
 	
 	private final File logFile;
-	private final Type activityListType = new TypeToken<ArrayList<Activity>>() {}.getType();
+	private final Type activityListType = new TypeToken<ArrayList<ActivityImpl>>() {}.getType();
 	
 	public PersistentActivityLogger(String logJsonFilePath) {
 		this.logFile = new File(logJsonFilePath);
@@ -37,7 +37,7 @@ public class PersistentActivityLogger extends VolatileActivityLogger {
 		List<Activity> log = new ArrayList<>();
 		if(!(this.logFile.length() == 0)) {
 			try (FileReader reader = new FileReader(this.logFile)) {
-				log = new Gson().fromJson(reader, activityListType);
+				log = new Gson().fromJson(reader, this.activityListType);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -47,7 +47,7 @@ public class PersistentActivityLogger extends VolatileActivityLogger {
 
 	private void writeLogFile(List<Activity> log) {
 		try (FileWriter writer = new FileWriter(this.logFile, false)) {
-			writer.write(new Gson().toJson(log, activityListType));
+			writer.write(new Gson().toJson(log, this.activityListType));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
