@@ -14,7 +14,7 @@ public class App {
     	s.start();
     	new Thread(()->{
     		while(true) {
-    			s.sendMsg();
+    			s.updateClients();
     			try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {

@@ -12,16 +12,22 @@ public class SSEHandler implements Handler<RoutingContext> {
 	public SSEHandler(final EventBus eventBus) {
 		this.eventBus = eventBus;
 	}
+	
+	private void setHeaders(HttpServerResponse response) {
+		response.headers()
+				.add("Content-Type", "text/event-stream;charset=UTF-8")
+				.add("Connection", "keep-alive")
+				.add("Cache-Control", "no-cache")
+				.add("Access-Control-Allow-Origin", "*");
+	}
 
 	@Override
 	public void handle(RoutingContext ctx) {
 		HttpServerResponse response = ctx.response();
 		
 		response.setChunked(true);
-		response.headers().add("Content-Type", "text/event-stream;charset=UTF-8");
-	    response.headers().add("Connection", "keep-alive");
-	    response.headers().add("Cache-Control", "no-cache");
-	    response.headers().add("Access-Control-Allow-Origin", "*");
+		this.setHeaders(response);
+		
 	    this.eventBus.consumer("events", message -> {
 	    	response.write("data:" + message.body() + "\n\n").onFailure((e)-> {
 	    		System.out.print("failure: " + e);

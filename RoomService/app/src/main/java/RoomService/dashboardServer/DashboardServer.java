@@ -32,7 +32,7 @@ public class DashboardServer extends AbstractVerticle {
 		this.server.requestHandler(this.router).listen(this.port);
 	}
 	
-	public void sendMsg() {
+	public void updateClients() {
 		this.vertx.eventBus().publish("events", "Ciao!");
 	}
 }
