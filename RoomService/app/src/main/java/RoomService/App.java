@@ -10,6 +10,17 @@ public class App {
 	final static int PORT = 80;
 
     public static void main(String[] args) {
-    	new DashboardServer(PORT).start();
+    	DashboardServer s = new DashboardServer(PORT);
+    	s.start();
+    	new Thread(()->{
+    		while(true) {
+    			s.sendMsg();
+    			try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+    		}
+    	}).start();
     }
 }
