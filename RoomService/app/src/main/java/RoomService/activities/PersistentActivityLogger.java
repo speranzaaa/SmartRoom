@@ -7,8 +7,9 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
+import RoomService.activities.gsonUtils.InterfaceSerializer;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import RoomService.actuators.Device;
@@ -17,6 +18,9 @@ public class PersistentActivityLogger extends VolatileActivityLogger {
 	
 	private final File logFile;
 	private final Type activityListType = new TypeToken<ArrayList<ActivityImpl>>() {}.getType();
+	private final Gson gson = new GsonBuilder()
+			.registerTypeAdapter(Status.class, InterfaceSerializer.interfaceSerializer(LightStatus.class))
+			.create();
 	
 	public PersistentActivityLogger(String logJsonFilePath) {
 		this.logFile = new File(logJsonFilePath);
@@ -37,7 +41,7 @@ public class PersistentActivityLogger extends VolatileActivityLogger {
 		List<Activity> log = new ArrayList<>();
 		if(!(this.logFile.length() == 0)) {
 			try (FileReader reader = new FileReader(this.logFile)) {
-				log = new Gson().fromJson(reader, this.activityListType);
+				log = this.gson.fromJson(reader, this.activityListType);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -47,7 +51,7 @@ public class PersistentActivityLogger extends VolatileActivityLogger {
 
 	private void writeLogFile(List<Activity> log) {
 		try (FileWriter writer = new FileWriter(this.logFile, false)) {
-			writer.write(new Gson().toJson(log, this.activityListType));
+			writer.write(this.gson.toJson(log, this.activityListType));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
