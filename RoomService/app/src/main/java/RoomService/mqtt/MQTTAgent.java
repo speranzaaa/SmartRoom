@@ -1,46 +1,37 @@
 package RoomService.mqtt;
 
-import io.netty.handler.codec.mqtt.MqttQoS;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.http.HttpServerResponse;
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.Router;
-import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.mqtt.MqttClient;
+import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import RoomService.logic.LogicController;
+import io.vertx.core.AbstractVerticle;
+import io.vertx.mqtt.MqttClient;
 
 /*
  * MQTT Agent
  */
 public class MQTTAgent extends AbstractVerticle {
 	
-	public MQTTAgent() {
+	private final LogicController logicController;
+	
+	public MQTTAgent(final LogicController logicController) {
+		this.logicController = logicController;
 	}
 
 	@Override
 	public void start() {		
 		MqttClient client = MqttClient.create(vertx);
-
+		final Gson gson = new Gson();
+		
 		client.connect(1883, "broker.mqtt-dashboard.com", c -> {
 
-			log("connected");
+			this.log("connected");
 			
-			log("subscribing...");
+			this.log("subscribing...");
 			client.publishHandler(s -> {
-			  System.out.println("There are new message in topic: " + s.topicName());
-			  System.out.println("Content(as string) of the message: " + s.payload().toString());
-			  System.out.println("QoS: " + s.qosLevel());
+				final String received = s.payload().toString();
+				this.logicController.updateRoom(gson.fromJson(received, SensorBoardData.class));
 			})
-			.subscribe("room-sensor-board", 2);		
+			.subscribe("room-sensor-board", 2);
 		});
 	}
 	
