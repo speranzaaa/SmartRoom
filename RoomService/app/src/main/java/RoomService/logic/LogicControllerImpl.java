@@ -58,7 +58,7 @@ public class LogicControllerImpl implements LogicController{
 		 */
 		if ((currentTime.isAfter(EVENING_THRESHOLD)
 				|| currentTime.isBefore(MORNING_THRESHOLD))
-				&& !data.isPresenceDetected()) {
+				&& !data.isPresenceDetected() && this.hasFirstPersonEntered) {
 			this.hasFirstPersonEntered = false;
 			this.rollerBlinds.close();
 			System.out.println("No one in the room after 8:00 PM, closing blinds.");
