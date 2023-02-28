@@ -1,11 +1,13 @@
 package RoomService;
 
-import RoomService.activities.ActivitiyLogger;
+import com.google.gson.Gson;
+import RoomService.activities.ActivityLogger;
 import RoomService.activities.LightStatus;
 import RoomService.activities.PersistentActivityLogger;
 import RoomService.activities.Status;
 import RoomService.actuators.Device;
 import RoomService.dashboardServer.DashboardServer;
+import RoomService.dashboardServer.SSEMessageImpl;
 
 public class App {
 	
@@ -15,8 +17,14 @@ public class App {
     public static void main(String[] args) {
     	DashboardServer s = new DashboardServer(PORT);
     	s.start();
-    	ActivitiyLogger activityLogger = new PersistentActivityLogger(ROOM_ACTIVITIES_LOG_PATH);
-    	activityLogger.addNewActivityListener((activity)->s.updateClients(activity.getStatus().toString()));
+    	ActivityLogger activityLogger = new PersistentActivityLogger(ROOM_ACTIVITIES_LOG_PATH);
+    	
+    	//send a new "SSE" Vert.x event on the server event bus. Then all client handlers receive the event and send the SSE message
+    	activityLogger.addNewActivityListener((activity)->s.sendSSEMessage(
+    			new SSEMessageImpl(
+    					activity.getDevice().toString(), 
+    					new Gson().toJson(activity))
+    	));
     	
     	//fake light implementation!!
     	Device light = new Device() {
@@ -32,7 +40,7 @@ public class App {
     		
     		@Override
     		public String toString() {
-    			return "Subsystem: Lights";
+    			return "lights";
     		}
     		
     	};

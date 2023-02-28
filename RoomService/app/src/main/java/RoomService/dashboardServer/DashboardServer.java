@@ -3,6 +3,7 @@ package RoomService.dashboardServer;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 
 public class DashboardServer extends AbstractVerticle {
@@ -23,7 +24,7 @@ public class DashboardServer extends AbstractVerticle {
 	}
 
 	private void setUpRoutes(Router router) {
-		router.route("/events").produces("text/event-stream").handler(new SSEHandler(this.vertx.eventBus()));
+		router.route("/activities").produces("text/event-stream").handler(new SSEHandler(this.vertx.eventBus()));
 		router.route().handler(new FileRequestHandler(RESOLUTION_PATH));
 	}
 
@@ -32,7 +33,11 @@ public class DashboardServer extends AbstractVerticle {
 		this.server.requestHandler(this.router).listen(this.port);
 	}
 	
-	public void updateClients(String msg) {
-		this.vertx.eventBus().publish("events", msg);
+	public void sendSSEMessage(SSEMessage message) {
+		this.vertx
+			.eventBus()
+			.publish("sse", new JsonObject()
+							.put("eventName", message.getEventName())
+							.put("messageBody", message.getMessageBody()));
 	}
 }

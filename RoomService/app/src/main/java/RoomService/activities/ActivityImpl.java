@@ -12,8 +12,8 @@ public class ActivityImpl implements Activity {
 	private final Status status;
 	
 	public ActivityImpl(final Device device, final Status status) {
-		this.device = device;
-		this.status = status;
+		this.device = Objects.requireNonNull(device);
+		this.status = Objects.requireNonNull(status);
 		this.timestamp = new Date();
 	}
 
@@ -44,5 +44,10 @@ public class ActivityImpl implements Activity {
 		}
 		ActivityImpl other = (ActivityImpl) obj;
 		return Objects.equals(device, other.device) && Objects.equals(timestamp, other.timestamp);
+	}
+
+	@Override
+	public String toString() {
+		return "ActivityImpl [device=" + device + ", timestamp=" + timestamp + ", status=" + status + "]";
 	}
 }

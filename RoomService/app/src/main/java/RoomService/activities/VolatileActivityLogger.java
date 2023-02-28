@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 import RoomService.actuators.Device;
 
-public class VolatileActivityLogger implements ActivitiyLogger {
+public class VolatileActivityLogger implements ActivityLogger {
 	
 	protected List<Activity> log;
 	private final Set<Consumer<Activity>> listeners;

@@ -3,6 +3,7 @@ package RoomService.dashboardServer;
 import io.vertx.core.Handler;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.http.HttpServerResponse;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 
 public class SSEHandler implements Handler<RoutingContext> {
@@ -28,10 +29,12 @@ public class SSEHandler implements Handler<RoutingContext> {
 		response.setChunked(true);
 		this.setHeaders(response);
 		
-	    this.eventBus.consumer("events", message -> {
-	    	response.write("data:" + message.body() + "\n\n").onFailure((e)-> {
-	    		System.out.print("failure: " + e);
-	    	});
+	    this.eventBus.consumer("sse", message -> {
+	    	JsonObject jsonMessage = new JsonObject(message.body().toString());
+	    	SSEMessage sseMessage = new SSEMessageImpl(
+	    				jsonMessage.getString("eventName"), 
+	    				jsonMessage.getString("messageBody"));
+	    	response.write(sseMessage.getFormattedMessage());
 	    });
 	}
 

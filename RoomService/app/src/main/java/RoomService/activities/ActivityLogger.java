@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 import RoomService.actuators.Device;
 
-public interface ActivitiyLogger {
+public interface ActivityLogger {
 
 	void logActivity(final Device device, final Status newStatus);
 	
