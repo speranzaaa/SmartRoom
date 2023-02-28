@@ -28,18 +28,34 @@ public class LogicControllerImpl implements LogicController{
 	}
 	
 	@Override
-	public void updateRoom(SensorBoardData data) {
+	public void updateRoom(final SensorBoardData data) {
 		// Control the lights
+		this.updateLights(data.isPresenceDetected());
+		// Control the blinds
+		this.updateRollerBlinds(data);
+	}
+	
+	/**
+	 * Updates the status of the lights.
+	 * @param presence boolean value indicating presence in the room
+	 */
+	private void updateLights(boolean presence) {
 		// If no one is in the room turn off the light
-		if (!data.isPresenceDetected()) {
+		if (!presence) {
 			this.lightLed.turnOff();
 			System.out.println("No one in the room, turning off lights.");
-		} else if (this.lightLed.isOff()){
+		} else if (this.lightLed.isOff()) {
 			// If someone enters the room and the light was off, turn it on
 			this.lightLed.turnOn();
 			System.out.println("Presence detected, turning on lights.");
 		}
-		// Control the blinds
+	}
+	
+	/**
+	 * Updates the status of the roller blinds
+	 * @param data {@link SensorBoardData} received from the sensor board
+	 */
+	private void updateRollerBlinds(final SensorBoardData data) {
 		final LocalTime currentTime = LocalTime.now();
 		/*
 		 * If someone enters the room between MORNING_THRESHOLD and EVENING_THRESHOLD
