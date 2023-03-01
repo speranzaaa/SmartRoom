@@ -1,6 +1,5 @@
 #include "BTTask.h"
-#include <Arduino.h>
-#include "Scheduler.h"
+
 
 
 BTTask::BTTask(int rxPin, int txPin, SmartRoom* smartRoom) : 

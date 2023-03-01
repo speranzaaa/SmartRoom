@@ -4,6 +4,8 @@
 #include "Task.h"
 #include "SmartRoom.h"
 #include "SoftwareSerial.h"
+#include <Arduino.h>
+#include "Scheduler.h"
 
 
 class BTTask : public Task {
