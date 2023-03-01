@@ -3,35 +3,50 @@ var lightSwitch = {
     switch: document.getElementById("lights-switch"),
 
     getStatus: function() {
-        return this.switch.checked ? "on" : "off";
+        return {isOn: lightSwitch.switch.checked};
     },
 
     setOn: function(on) {
         this.switch.checked = on;
     },
 
-    onChange: function(func) {
-        this.switch.addEventListener("change", func);
+    onChange: function(handler) {
+        this.switch.addEventListener("change", handler);
     }
 };
 
-var controls = {
-    getStates: function() {
-        return {
-            lightSwitch: lightSwitch.getStatus(),
-        }
+//rollerblinds-slider object
+var rollerblindSlider = {
+    slider: document.getElementById("rollerblinds-slider"),
+
+    getStatus: function() {
+        return {value: rollerblindSlider.slider.value}
+    },
+
+    set: function(value) {
+        this.slider.value = value;
+    },
+
+    onChange: function(handler) {
+        this.slider.addEventListener("input", handler);
     }
 }
 
 //update server on controls changes
-var httpReq = new XMLHttpRequest();
-httpReq.onreadystatechange = function() {
-    if (httpReq.readyState == 4 && httpReq.status == 200) {
-        document.getElementById("myDiv").innerHTML = httpReq.responseText;
-    }
-};
-
 lightSwitch.onChange(()=>{
+    var httpReq = new XMLHttpRequest();
     httpReq.open("POST", "/control", true);
-    httpReq.send(JSON.stringify(controls.getStates()));
+    httpReq.send(JSON.stringify({
+        control: "lightSwitch",
+        status: lightSwitch.getStatus()
+    }));
 });
+
+rollerblindSlider.onChange(()=>{
+    var httpReq = new XMLHttpRequest();
+    httpReq.open("POST", "/control", true);
+    httpReq.send(JSON.stringify({
+        control: "rollerblindSlider",
+        status: rollerblindSlider.getStatus()
+    }));
+})

@@ -10,8 +10,9 @@ public class SwitchStatusImpl implements SwitchStatus {
 	}
 
 	@Override
-	public String getJson() {
-		return null;
+	public boolean isOn() {
+		return this.on;
 	}
+
 
 }

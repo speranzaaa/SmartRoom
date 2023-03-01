@@ -12,7 +12,7 @@ public class ControlHandler implements Handler<RoutingContext> {
 		
 		request.bodyHandler(buffer->{
 			String body = buffer.getString(0, buffer.length());
-			System.out.println(body);
+			ctx.vertx().eventBus().publish("control", body);
 		});
 		
 		ctx.response().end();

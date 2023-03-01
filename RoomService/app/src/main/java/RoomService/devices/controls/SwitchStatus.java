@@ -6,4 +6,6 @@ public interface SwitchStatus extends Status {
 	
 	void setOn(boolean on);
 	
+	boolean isOn();
+	
 }

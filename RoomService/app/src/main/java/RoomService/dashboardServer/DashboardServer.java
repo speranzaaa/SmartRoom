@@ -1,7 +1,8 @@
 package RoomService.dashboardServer;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
-
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
@@ -16,6 +17,7 @@ public class DashboardServer extends AbstractVerticle {
 	private final HttpServer server;
 	private final int port;
 	private final Router router;
+	private final Set<Consumer<JsonObject>> controlsObservers = new HashSet<>();
 	
 	public DashboardServer(int port) {
 		this.port = port;
@@ -23,6 +25,12 @@ public class DashboardServer extends AbstractVerticle {
 		this.server = this.vertx.createHttpServer();
 		this.router = Router.router(this.vertx);
 		this.setUpRoutes(this.router);
+		this.vertx.eventBus().consumer("control", (message)->{
+			JsonObject jsonMessage = new JsonObject(message.body().toString());
+			controlsObservers.stream().forEach((consumer)->{
+				consumer.accept(jsonMessage);
+			});
+		});
 	}
 
 	private void setUpRoutes(Router router) {
@@ -44,6 +52,7 @@ public class DashboardServer extends AbstractVerticle {
 							.put("messageBody", message.getMessageBody()));
 	}
 	
-	public void onControlsUpdates(Consumer<String> handler) {
+	public void addControlObserver(Consumer<JsonObject> consumer) {
+		this.controlsObservers.add(consumer);
 	}
 }

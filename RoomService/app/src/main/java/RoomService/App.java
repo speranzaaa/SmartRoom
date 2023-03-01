@@ -19,6 +19,11 @@ public class App {
     public static void main(String[] args) {
     	DashboardServer s = new DashboardServer(PORT);
     	s.start();
+    	
+    	s.addControlObserver((obj)->{
+    		System.out.println(obj.toString());
+    	});
+    	
     	ObservableActivityLogger activityLogger = new ObservableActivityLoggerImpl(new PersistentActivityLogger(ROOM_ACTIVITIES_LOG_PATH));
     	
     	//send a new "SSE" Vert.x event on the server event bus. Then all client handlers receive the event and send the SSE message
