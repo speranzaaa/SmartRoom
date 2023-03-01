@@ -1,8 +1,11 @@
 package RoomService;
 
 import com.google.gson.Gson;
-import RoomService.activities.ActivityLogger;
+
+import RoomService.activities.ActivityImpl;
 import RoomService.activities.LightStatus;
+import RoomService.activities.ObservableActivityLogger;
+import RoomService.activities.ObservableActivityLoggerImpl;
 import RoomService.activities.PersistentActivityLogger;
 import RoomService.devices.Status;
 import RoomService.devices.actuators.Actuator;
@@ -17,10 +20,10 @@ public class App {
     public static void main(String[] args) {
     	DashboardServer s = new DashboardServer(PORT);
     	s.start();
-    	ActivityLogger activityLogger = new PersistentActivityLogger(ROOM_ACTIVITIES_LOG_PATH);
+    	ObservableActivityLogger activityLogger = new ObservableActivityLoggerImpl(new PersistentActivityLogger(ROOM_ACTIVITIES_LOG_PATH));
     	
     	//send a new "SSE" Vert.x event on the server event bus. Then all client handlers receive the event and send the SSE message
-    	activityLogger.addNewActivityListener((activity)->s.sendSSEMessage(
+    	activityLogger.addActivitiesObserver((activity)->s.sendSSEMessage(
     			new SSEMessageImpl(
     					activity.getDevice().toString(), 
     					new Gson().toJson(activity))
@@ -53,7 +56,7 @@ public class App {
 		//thread for testing activities: every second the light is turned on/off.
     	new Thread(()->{
     		while(true) {
-    			activityLogger.logActivity(light, light.getCurrentStatus());
+    			activityLogger.logActivity(new ActivityImpl(light, light.getCurrentStatus()));
     			try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
