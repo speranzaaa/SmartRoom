@@ -1,4 +1,4 @@
-package RoomService.sensors;
+package RoomService.devices.sensors;
 
 public interface Pir extends Sensor {
     /**

@@ -1,4 +1,4 @@
-package RoomService.actuators;
+package RoomService.devices.actuators;
 
 public interface LightLed {
 

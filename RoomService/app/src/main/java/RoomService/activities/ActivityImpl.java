@@ -3,7 +3,8 @@ package RoomService.activities;
 import java.util.Date;
 import java.util.Objects;
 
-import RoomService.actuators.Device;
+import RoomService.devices.Device;
+import RoomService.devices.Status;
 
 public class ActivityImpl implements Activity {
 	

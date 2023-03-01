@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import RoomService.activities.ActivityLogger;
 import RoomService.activities.LightStatus;
 import RoomService.activities.PersistentActivityLogger;
-import RoomService.activities.Status;
-import RoomService.actuators.Device;
+import RoomService.devices.Status;
+import RoomService.devices.actuators.Actuator;
 import RoomService.dashboardServer.DashboardServer;
 import RoomService.dashboardServer.SSEMessageImpl;
 
@@ -27,7 +27,7 @@ public class App {
     	));
     	
     	//fake light implementation!!
-    	Device light = new Device() {
+    	Actuator light = new Actuator() {
     		
     		boolean on = true;
     				
@@ -42,6 +42,11 @@ public class App {
     		public String toString() {
     			return "lights";
     		}
+
+			@Override
+			public String getName() {
+				return "lights-subgroup";
+			}
     		
     	};
     		

@@ -1,5 +1,7 @@
 package RoomService.dashboardServer;
 
+import java.util.function.Consumer;
+
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
@@ -40,5 +42,8 @@ public class DashboardServer extends AbstractVerticle {
 			.publish("sse", new JsonObject()
 							.put("eventName", message.getEventName())
 							.put("messageBody", message.getMessageBody()));
+	}
+	
+	public void onControlsUpdates(Consumer<String> handler) {
 	}
 }

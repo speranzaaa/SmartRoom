@@ -1,4 +1,4 @@
-package RoomService.sensors;
+package RoomService.devices.sensors;
 
 /**
  * Class that represents the pir sensor.

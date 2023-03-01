@@ -4,7 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 
-import RoomService.actuators.Device;
+import RoomService.devices.Device;
+import RoomService.devices.Status;
 
 public interface ActivityLogger {
 

@@ -1,10 +1,10 @@
 package RoomService.logic;
 
 import java.time.LocalTime;
-import RoomService.actuators.LightLed;
-import RoomService.actuators.LightLedImpl;
-import RoomService.actuators.RollerBlinds;
-import RoomService.actuators.RollerBlindsImpl;
+import RoomService.devices.actuators.LightLed;
+import RoomService.devices.actuators.LightLedImpl;
+import RoomService.devices.actuators.RollerBlinds;
+import RoomService.devices.actuators.RollerBlindsImpl;
 import RoomService.mqtt.SensorBoardData;
 
 /**

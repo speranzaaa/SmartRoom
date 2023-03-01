@@ -12,7 +12,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import RoomService.actuators.Device;
+import RoomService.devices.Status;
+import RoomService.devices.actuators.Actuator;
 
 public class PersistentActivityLogger extends VolatileActivityLogger {
 	
@@ -58,7 +59,7 @@ public class PersistentActivityLogger extends VolatileActivityLogger {
 	}
 	
 	@Override
-	public void logActivity(Device device, Status newStatus) {
+	public void logActivity(Actuator device, Status newStatus) {
 		super.logActivity(device, newStatus);
 		this.writeLogFile(this.log);
 	}

@@ -1,8 +1,8 @@
 package RoomService.activities;
 
 import java.util.Date;
-
-import RoomService.actuators.Device;
+import RoomService.devices.Device;
+import RoomService.devices.Status;
 
 public interface Activity {
 	

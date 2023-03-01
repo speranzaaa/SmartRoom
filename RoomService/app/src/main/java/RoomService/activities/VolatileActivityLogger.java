@@ -7,8 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import RoomService.actuators.Device;
+import RoomService.devices.Device;
+import RoomService.devices.Status;
 
 public class VolatileActivityLogger implements ActivityLogger {
 	

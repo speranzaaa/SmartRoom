@@ -1,7 +1,7 @@
-package RoomService.sensors;
+package RoomService.devices.sensors;
 
 /**
- * Class that implements the {@link RoomService.sensors.LightSensor} interface.
+ * Class that implements the {@link RoomService.devices.sensors.LightSensor} interface.
  */
 public class LightSensorImpl implements LightSensor {
     private boolean day = false;
