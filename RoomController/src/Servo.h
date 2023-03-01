@@ -3,19 +3,17 @@
 
 #include "Arduino.h"
 #include "Sensor.h"
-#include "Utils.h"
-#include <Servo.h>
 
+class Servo : public Component {
+  
+  int angle = 0;
 
-class ServoMotor : public Component {
   public:
-    ServoMotor(const int pin); 
+    Servo(const int pin); 
     void move(int percentage);
+    int getAngle();
     int getOpeningPercentage();
-
-  private:
-    Servo servo;
-    int percentage; 
+    
 };
 
 #endif

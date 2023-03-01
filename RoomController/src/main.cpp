@@ -9,16 +9,16 @@
 Scheduler scheduler(SCHEDULER_PERIOD);
 
 void setup(){
-  ServoMotor* servo = new ServoMotor(SERVOMOTOR_PIN);
+  Servo* servo = new Servo(SERVOMOTOR_PIN);
   Led* led = new Led(LED_PIN);
   SmartRoom* smartRoom = new SmartRoom(servo, led);
   SerialTask* serialTask = new SerialTask(smartRoom);
-  BTTask* BTTask = new BTTask(BT_RX_PIN, BT_TX_PIN, smartRoom);
+  BTTask* bttask = new BTTask(RX_BT_PIN, TX_BT_PIN, smartRoom);
 
   scheduler.init();
   
-  BTTask->init(BT_PERIOD);
-  scheduler.addTask(BTTask);
+  bttask->init(BT_PERIOD);
+  scheduler.addTask(bttask);
 
   serialTask->init(SERIAL_PERIOD);
   scheduler.addTask(serialTask);

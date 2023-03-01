@@ -1,17 +1,19 @@
 #include "Servo.h"
-#include "Arduino.h"
-#include <Servo.h>
 
-ServoMotor::ServoMotor(const int pin) : Component(pin) {
-  servo.attach(pin);
-  percentage = 0;
+Servo::Servo(const int pin) : Component(pin) {
+    
 }
 
-void ServoMotor::move(int percentage) {
-  this->percentage = percentage;
-  servo.write(percentage);
+void Servo::move(int percentage) {
+  int newAngle = map(percentage, 0, 100, 180, 0);
+  this->angle = newAngle;
+  analogWrite(this->pin, newAngle);  
 }
 
-int ServoMotor::getOpeningPercentage() {
-  return percentage;
+int Servo::getAngle() {
+  return this->angle;
+}
+
+int Servo::getOpeningPercentage(){
+  return map(this->angle, 0, 180, 100, 0);
 }
