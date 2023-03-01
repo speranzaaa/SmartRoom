@@ -66,3 +66,9 @@ main {
 .card h2 {
     margin-top: 0;
 }
+
+@media screen and (max-width: 1000px) {
+    main {
+        flex-direction: column;
+    }
+}

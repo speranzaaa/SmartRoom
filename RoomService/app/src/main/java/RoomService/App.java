@@ -47,7 +47,7 @@ public class App {
     		
     		@Override
     		public String toString() {
-    			return "lights";
+    			return "device: light-subgroup";
     		}
 
 			@Override
