@@ -15,4 +15,9 @@ public class LightStatus implements Status {
 		return on ? "On" : "Off";
 	}
 
+	@Override
+	public String getJson() {
+		return "";
+	}
+
 }

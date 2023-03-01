@@ -1,7 +1,6 @@
 package RoomService;
 
 import com.google.gson.Gson;
-
 import RoomService.activities.ActivityImpl;
 import RoomService.activities.LightStatus;
 import RoomService.activities.ObservableActivityLogger;
@@ -25,7 +24,7 @@ public class App {
     	//send a new "SSE" Vert.x event on the server event bus. Then all client handlers receive the event and send the SSE message
     	activityLogger.addActivitiesObserver((activity)->s.sendSSEMessage(
     			new SSEMessageImpl(
-    					activity.getDevice().toString(), 
+    					activity.getDevice().getName(), 
     					new Gson().toJson(activity))
     	));
     	
