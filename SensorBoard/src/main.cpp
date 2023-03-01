@@ -23,7 +23,6 @@ WiFiClient espClient;
 PubSubClient* client = new PubSubClient(espClient);
 
 
-unsigned long lastMsgTime = 0;
 char msg[MSG_BUFFER_SIZE];
 
 TaskHandle_t Task1;
@@ -68,12 +67,9 @@ void setup() {
         Serial.println("failed to create mutex, quitting");
         exit(1);
     }
-    // Create light sensor task on core 0
     xTaskCreatePinnedToCore(LightTask, "LightTask", 10000, NULL, 1, &Task1, 0);
     delay(100);
     xTaskCreatePinnedToCore(PirTask, "PirTask", 10000, NULL, 1, &Task2, 0);
-    // xTaskCreatePinnedToCore(SecondTaskCode, "SecondTask", 10000, NULL, 1, &Task2, 1);
-    // delay(500);
 }
 
 // Main loop that reads values of isDay and isPresenceDetected and sends via mqtt
@@ -81,24 +77,22 @@ void loop() {
     bool currDay;
     bool currPresence;
     while(xSemaphoreTake(dayMutex, 100) == pdFALSE){
-        // Serial.println("mutex not taken, delaying for 1 sec");
         delay(1000);
     }
     currDay = isDay;
     xSemaphoreGive(dayMutex);
     while(xSemaphoreTake(presenceMutex, 100) == pdFALSE){
-        // Serial.println("mutex not taken, delaying for 1 sec");
         delay(1000);
     }
     currPresence = isPresenceDetected;
     xSemaphoreGive(presenceMutex);
-    Serial.println("Sensor data obtained, publishing to topic");
+    // Serial.println("Sensor data obtained, publishing to topic");
     char msg[MSG_BUFFER_SIZE];
     DynamicJsonDocument doc(128);
     doc["isDay"] = currDay;
     doc["isPresence"] = currPresence;
     serializeJson(doc, msg);
-    serializeJson(doc, Serial);
+    // serializeJson(doc, Serial);
     while (!client->connected()) {
         Serial.print("Attempting MQTT connection...");
         Serial.flush();
@@ -109,20 +103,13 @@ void loop() {
         // Attempt to connect
         if (client->connect(clientId.c_str())) {
             Serial.println("connected");
-            // ... and resubscribe
-            // client->subscribe(topic);
         } else {
             Serial.print("failed, rc=");
             Serial.println(client->state());
-            // Serial.println(" try again in 5 seconds");
-            // Wait 5 seconds before retrying
             delay(500);
         }
     }
     client->loop();
     client->publish(topic, msg);
-    // Serial.print("Main loop running on core ");
-    // Serial.println(xPortGetCoreID());
-    // Serial.flush();
     delay(1000);
 }
