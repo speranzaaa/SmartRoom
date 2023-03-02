@@ -19,8 +19,12 @@ var lightSwitch = {
 var rollerblindSlider = {
     slider: document.getElementById("rollerblinds-slider"),
 
+    getPercentage: function() {
+        return Number(this.slider.value);
+    },
+
     getStatus: function() {
-        return {value: rollerblindSlider.slider.value}
+        return {percentage: rollerblindSlider.getPercentage()};
     },
 
     set: function(value) {

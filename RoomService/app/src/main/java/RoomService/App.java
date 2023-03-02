@@ -9,8 +9,10 @@ import RoomService.activities.ObservableActivityLogger;
 import RoomService.activities.ObservableActivityLoggerWrapper;
 import RoomService.activities.PersistentActivityLogger;
 import RoomService.devices.Device;
-import RoomService.devices.actuators.LightLed;
-import RoomService.devices.actuators.LightLedImpl;
+import RoomService.devices.actuators.Light;
+import RoomService.devices.actuators.LightImpl;
+import RoomService.devices.actuators.RollerBlinds;
+import RoomService.devices.actuators.RollerBlindsImpl;
 import RoomService.devices.controls.ModelController;
 import RoomService.dashboardServer.DashboardServer;
 import RoomService.dashboardServer.SSEMessageImpl;
@@ -40,10 +42,16 @@ public class App {
     	Map<String, Device> devices = new HashMap<>();
     	
     	//------- LIGHTS SUBGROUP ------
-    	LightLed light = new LightLedImpl("lights-subgroup");
+    	Light light = new LightImpl("lights-subgroup");
     	devices.put(light.getName(), light);
-    	//log new activity when lights status change
+    	//log new activities when lights status change
     	light.addStatusObserver((status)->activityLogger.logActivity(new ActivityImpl(light, status)));
+    	
+    	//------- ROLLERBLINDS -------
+    	RollerBlinds rollerblinds = new RollerBlindsImpl("rollerblinds-subgroup");
+    	devices.put(rollerblinds.getName(), rollerblinds);
+    	//log new activities when rollerblinds status change
+    	rollerblinds.addStatusObserver((status)->activityLogger.logActivity(new ActivityImpl(rollerblinds, status)));
     	
     	//------ REACT TO DASHBOARD CONTROLS -------
     	//control model from DashBoard controls

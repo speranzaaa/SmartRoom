@@ -1,8 +1,8 @@
 package RoomService.logic;
 
 import java.time.LocalTime;
-import RoomService.devices.actuators.LightLed;
-import RoomService.devices.actuators.LightLedImpl;
+import RoomService.devices.actuators.Light;
+import RoomService.devices.actuators.LightImpl;
 import RoomService.devices.actuators.RollerBlinds;
 import RoomService.devices.actuators.RollerBlindsImpl;
 import RoomService.mqtt.SensorBoardData;
@@ -15,7 +15,7 @@ public class LogicControllerImpl implements LogicController{
 	private static final LocalTime MORNING_THRESHOLD = LocalTime.of(8, 0);
 	private static final LocalTime EVENING_THRESHOLD = LocalTime.of(19, 0);
 	
-	private final LightLed lightLed;
+	private final Light lightLed;
 	private final RollerBlinds rollerBlinds;
 	private boolean hasFirstPersonEntered = false;
 	
@@ -23,7 +23,7 @@ public class LogicControllerImpl implements LogicController{
 	 * Creates a new instance of the {@link LogicControllerImpl} class.
 	 */
 	public LogicControllerImpl() {
-		this.lightLed = new LightLedImpl("lights-subgroup");
+		this.lightLed = new LightImpl("lights-subgroup");
 		this.rollerBlinds = new RollerBlindsImpl();
 	}
 	
@@ -65,7 +65,7 @@ public class LogicControllerImpl implements LogicController{
 				&& currentTime.isBefore(EVENING_THRESHOLD)
 				&& !this.hasFirstPersonEntered) {
 			this.hasFirstPersonEntered = true;
-			this.rollerBlinds.open();
+			this.rollerBlinds.openFully();
 			System.out.println("First person has entered the room, opening blinds.");
 		}
 		/*

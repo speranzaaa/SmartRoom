@@ -2,35 +2,24 @@ package RoomService.devices.actuators;
 import RoomService.devices.AbstractObservableDevice;
 import RoomService.devices.Status;
 
-public class LightLedImpl extends AbstractObservableDevice implements LightLed {
+public class LightImpl extends AbstractObservableDevice implements Light {
 
     private boolean isOn = false;
     private final String name;
     
-    public LightLedImpl(String deviceName) {
+    public LightImpl(String deviceName) {
     	this.name = deviceName;
     }
 
     @Override
-    public void turnOn() {
-        isOn = true;
-        this.updateObservers(this.getCurrentStatus());
-    }
-
-    @Override
-    public void turnOff() {
-        isOn = false;
+    public void turnOn(boolean on) {
+        isOn = on;
         this.updateObservers(this.getCurrentStatus());
     }
 
     @Override
     public boolean isOn() {
         return isOn;
-    }
-
-    @Override
-    public boolean isOff() {
-        return !isOn;
     }
 
 	@Override
@@ -53,7 +42,7 @@ public class LightLedImpl extends AbstractObservableDevice implements LightLed {
 
 		@Override
 		public String toString() {
-			return on ? "On" : "Off";
+			return "Light:" + (on ? "On" : "Off");
 		}
 	}
 }

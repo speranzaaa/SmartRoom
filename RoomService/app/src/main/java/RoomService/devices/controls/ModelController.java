@@ -2,9 +2,9 @@ package RoomService.devices.controls;
 
 import java.util.Map;
 import java.util.function.Consumer;
-
 import RoomService.devices.Device;
-import RoomService.devices.actuators.LightLed;
+import RoomService.devices.actuators.Light;
+import RoomService.devices.actuators.RollerBlinds;
 import io.vertx.core.json.JsonObject;
 
 public class ModelController implements Consumer<JsonObject> {
@@ -19,14 +19,10 @@ public class ModelController implements Consumer<JsonObject> {
 	public void accept(JsonObject obj) {
 		switch(obj.getString("control")) {
 			case "lightSwitch":
-				if(obj.getJsonObject("status").getBoolean("isOn")) {
-					((LightLed) this.modelDevices.get("lights-subgroup")).turnOn();
-				} else {
-					((LightLed) this.modelDevices.get("lights-subgroup")).turnOff();
-				}
+				((Light) this.modelDevices.get("lights-subgroup")).turnOn(obj.getJsonObject("status").getBoolean("isOn"));
 				break;
 			case "rollerblindSlider":
-				System.out.println(obj.toString());
+				((RollerBlinds) this.modelDevices.get("rollerblinds-subgroup")).setTo(obj.getJsonObject("status").getInteger("percentage"));
 				break;
 			default:
 				throw new IllegalArgumentException("The json object is an unknown control." + obj.toString());	
