@@ -2,7 +2,6 @@ package RoomService;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import com.google.gson.Gson;
 import RoomService.activities.ActivityImpl;
 import RoomService.activities.ObservableActivityLogger;
@@ -27,7 +26,6 @@ public class App {
     	//----- DASHBOARD SERVER ------
     	DashboardServer s = new DashboardServer(PORT);
     	s.start();
-    	
     	
     	//------ ACTIVITY LOGGER --------
     	ObservableActivityLogger activityLogger = new ObservableActivityLoggerWrapper(new PersistentActivityLogger(ROOM_ACTIVITIES_LOG_PATH));

@@ -24,7 +24,7 @@ public class LogicControllerImpl implements LogicController{
 	 */
 	public LogicControllerImpl() {
 		this.lightLed = new LightImpl("lights-subgroup");
-		this.rollerBlinds = new RollerBlindsImpl();
+		this.rollerBlinds = new RollerBlindsImpl("rollerblinds-subgroup");
 	}
 	
 	@Override
@@ -42,11 +42,11 @@ public class LogicControllerImpl implements LogicController{
 	private void updateLights(boolean presence) {
 		// If no one is in the room turn off the light
 		if (!presence) {
-			this.lightLed.turnOff();
+			this.lightLed.turnOn(false);
 			System.out.println("No one in the room, turning off lights.");
-		} else if (this.lightLed.isOff()) {
+		} else if (!this.lightLed.isOn()) {
 			// If someone enters the room and the light was off, turn it on
-			this.lightLed.turnOn();
+			this.lightLed.turnOn(true);
 			System.out.println("Presence detected, turning on lights.");
 		}
 	}
