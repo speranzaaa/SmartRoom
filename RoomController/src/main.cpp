@@ -1,5 +1,5 @@
 #include "Scheduler.h"
-#include "Servo.h"
+#include "RollerBlinds.h"
 #include "Led.h"
 #include "SmartRoom.h"
 #include "BTTask.h"
@@ -9,7 +9,7 @@
 Scheduler scheduler(SCHEDULER_PERIOD);
 
 void setup(){
-  Servo* servo = new Servo(SERVOMOTOR_PIN);
+  RollerBlinds* servo = new RollerBlinds(SERVOMOTOR_PIN);
   Led* led = new Led(LED_PIN);
   SmartRoom* smartRoom = new SmartRoom(servo, led);
   SerialTask* serialTask = new SerialTask(smartRoom);

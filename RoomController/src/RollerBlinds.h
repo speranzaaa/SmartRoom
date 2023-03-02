@@ -3,13 +3,15 @@
 
 #include "Arduino.h"
 #include "Sensor.h"
+#include <Servo.h>
 
-class Servo : public Component {
+
+class RollerBlinds : public Component, public Servo {
   
   int angle = 0;
 
   public:
-    Servo(const int pin); 
+    RollerBlinds(const int pin); 
     void move(int percentage);
     int getAngle();
     int getOpeningPercentage();

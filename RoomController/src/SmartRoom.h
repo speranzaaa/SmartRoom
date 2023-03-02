@@ -1,15 +1,15 @@
 #ifndef __ROOM__
 #define __ROOM__
 
-#include "Servo.h"
+#include "RollerBlinds.h""
 #include "Led.h"
 
 class SmartRoom {
-  Servo* servoMotor;
+  RollerBlinds* servoMotor;
   Led* led;
 
 public:
-  SmartRoom(Servo* servoMotor, Led* led);
+  SmartRoom(RollerBlinds* servoMotor, Led* led);
 
   void setLedState(bool state);
   bool getLedState();

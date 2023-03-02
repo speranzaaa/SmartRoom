@@ -1,6 +1,6 @@
 #include "SmartRoom.h"
 
-SmartRoom::SmartRoom(Servo* servoMotor, Led* led) : 
+SmartRoom::SmartRoom(RollerBlinds* servoMotor, Led* led) : 
   servoMotor(servoMotor), led(led){}
 
 void SmartRoom::setLedState(bool state){
