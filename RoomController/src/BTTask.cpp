@@ -1,7 +1,5 @@
 #include "BTTask.h"
 
-
-
 BTTask::BTTask(int rxPin, int txPin, SmartRoom* smartRoom) : 
   rxPin(rxPin), txPin(txPin), smartRoom(smartRoom) {}
   

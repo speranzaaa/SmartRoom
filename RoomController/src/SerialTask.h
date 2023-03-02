@@ -3,15 +3,20 @@
 
 #include "Task.h"
 #include "SmartRoom.h"
+#include "MsgService.h"
 
 class SerialTask : public Task {
-  SmartRoom* smartRoom;
-  bool message;
+  
+  public: 
+    SerialTask(int period, SmartRoom* room);  
 
-public:
-  SerialTask(SmartRoom* smartRoom);  
-  void init(int period);  
-  void tick();
-};
+  protected: 
+    void write(bool ledState, int servoOpening);
+    void read();
+  
+  private:
+    SmartRoom* room;
+    MsgService* service;
+}; 
 
 #endif

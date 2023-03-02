@@ -1,16 +1,16 @@
 #include "SerialTask.h"
 #include <Arduino.h>
 #include "Scheduler.h"
+#include "SmartRoom.h"
+#include "MsgService.h"
+#include "Task.h"
 
-SerialTask::SerialTask(SmartRoom* smartRoom) : 
-  smartRoom(smartRoom) {
-    message = false;
-  }
-  void SerialTask::init(int period){
-  Task::init(period);
-  Serial.begin(9600);
+SerialTask::SerialTask(int period, SmartRoom* room) {
+  this->room = room;
+  this->service = new MsgService();
+  this->init(period);
 }
-  
-void SerialTask::tick() { 
-  
+
+void SerialTask::write(bool ledState, int servoOpening) {
+  this->service->sendMsg(ledState, servoOpening);
 }
