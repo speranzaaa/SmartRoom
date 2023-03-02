@@ -8,38 +8,39 @@ input[type="checkbox"].toggle-switch {
 }
 
 label.toggle-switch {
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    user-select: none;
 }
 
 label.toggle-switch::before {
     order: 1;
     content: "";
     background-color: gray;
-    height: 25px;
-    width: 54px;
-    border-radius: 12.5px;
-    margin-left: 10px;
-    filter: drop-shadow(1px 1px 1px rgba(60, 60, 60, 0.404));  
+    height: 1.5rem;
+    width: 3.2rem;
+    border-radius: .75rem;
+    margin-left: 1rem;
+    filter: drop-shadow(.1rem .1rem .1rem rgba(60, 60, 60, 0.404));  
     cursor: pointer;
 }
 
 label.toggle-switch::after {
     position: relative;
-    right: 63px;
+    right: 4.15rem;
     order: 2;
     content: "";
     background-color: white;
-    height: 23px;
-    width: 23px;
-    border-radius: 11.5px;
-    margin-left: 10px;
+    height: 1.4rem;
+    width: 1.4rem;
+    border-radius: 0.7rem;
+    margin-left: 1rem;
     transition: transform .3s ease-in-out;
     cursor: pointer;
 }
 
 input[type="checkbox"].toggle-switch:checked + label.toggle-switch::after {
-    transform: translate(29px);
+    transform: translate(1.7rem);
 }
 
 input[type="checkbox"].toggle-switch:checked + label.toggle-switch::before {
