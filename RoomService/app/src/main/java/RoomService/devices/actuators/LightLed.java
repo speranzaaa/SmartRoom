@@ -1,6 +1,6 @@
 package RoomService.devices.actuators;
 
-public interface LightLed {
+public interface LightLed extends Actuator {
 
     void turnOn();
 

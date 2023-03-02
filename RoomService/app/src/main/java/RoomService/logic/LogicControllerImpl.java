@@ -23,7 +23,7 @@ public class LogicControllerImpl implements LogicController{
 	 * Creates a new instance of the {@link LogicControllerImpl} class.
 	 */
 	public LogicControllerImpl() {
-		this.lightLed = new LightLedImpl();
+		this.lightLed = new LightLedImpl("lights-subgroup");
 		this.rollerBlinds = new RollerBlindsImpl();
 	}
 	

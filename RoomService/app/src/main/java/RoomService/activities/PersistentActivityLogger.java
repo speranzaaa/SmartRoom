@@ -11,7 +11,10 @@ import RoomService.activities.gsonUtils.InterfaceSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
+import RoomService.devices.Device;
 import RoomService.devices.Status;
+import RoomService.devices.actuators.LightLedImpl;
 
 public class PersistentActivityLogger extends VolatileActivityLogger {
 	
@@ -19,6 +22,7 @@ public class PersistentActivityLogger extends VolatileActivityLogger {
 	private final Type activityListType = new TypeToken<ArrayList<ActivityImpl>>() {}.getType();
 	private final Gson gson = new GsonBuilder()
 			.registerTypeAdapter(Status.class, InterfaceSerializer.interfaceSerializer(LightStatus.class))
+			.registerTypeAdapter(Device.class, InterfaceSerializer.interfaceSerializer(LightLedImpl.class))
 			.create();
 	
 	public PersistentActivityLogger(String logJsonFilePath) {
