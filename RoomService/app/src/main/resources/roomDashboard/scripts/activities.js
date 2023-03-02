@@ -8,7 +8,9 @@ source.addEventListener("lights-subgroup", function(event) {
 
 //append new activities
 source.addEventListener("lights-subgroup", function(event) {
-    var activity = document.createElement("li")
-    activity.innerHTML = event.data;
-    document.getElementById("activity-log").prepend(activity);
+    var lightsActivity = JSON.parse(event.data);
+    var isOn = lightsActivity.status.on
+    var line = document.createElement("li")
+    line.innerHTML = `<strong>${lightsActivity.device.name}: </strong><span>${isOn ? "On": "Off"}</span>`
+    document.getElementById("activity-log").prepend(line);
 });
