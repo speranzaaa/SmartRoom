@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 public class ObservableActivityLoggerWrapper implements ObservableActivityLogger {
 	
 	private final ActivityLogger wrappedActivityLogger;
-	private final Set<Consumer<Activity>> listeners;
+	private final transient Set<Consumer<Activity>> listeners;
 	
 	/**
 	 * Create a new ObservableActivityLoggerWrapper wrapping an existing ActivityLogger.

@@ -21,10 +21,6 @@ public class App {
     	DashboardServer s = new DashboardServer(PORT);
     	s.start();
     	
-    	//handle only dashboard controls triggered events
-    	s.addControlObserver((obj)->{
-    		System.out.println(obj.toString());
-    	});
     	
     	//------ACTIVITY_LOGGER--------
     	ObservableActivityLogger activityLogger = new ObservableActivityLoggerWrapper(new PersistentActivityLogger(ROOM_ACTIVITIES_LOG_PATH));
@@ -40,19 +36,16 @@ public class App {
     	//log new activity when lights status change
     	light.addStatusObserver((status)->activityLogger.logActivity(new ActivityImpl(light, status)));
     	
-    		
-		//thread for testing activities: every second the light is turned on/off.
-    	new Thread(()->{
-    		while(true) {
-    			try {
-    				Thread.sleep(1000);
+    	
+    	//change light status on DashBoard controls
+    	s.addControlObserver((obj)->{
+    		if(obj.getString("control").equals("lightSwitch")) {
+    			if(obj.getJsonObject("status").getBoolean("isOn")) {
     				light.turnOn();
-					Thread.sleep(1000);
-	    			light.turnOff();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+    			} else {
+    				light.turnOff();
+    			}
     		}
-    	}).start();
+    	});
     }
 }

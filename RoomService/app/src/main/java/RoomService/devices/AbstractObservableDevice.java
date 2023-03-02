@@ -6,9 +6,8 @@ import java.util.function.Consumer;
 
 public abstract class AbstractObservableDevice implements ObservableDevice {
 	
-	private final Set<Consumer<Status>> observers = new HashSet<>();;
+	private final transient Set<Consumer<Status>> observers = new HashSet<>();;
 
-	@SuppressWarnings("unused")
 	protected void updateObservers(Status newStatus) {
 		this.observers.stream().forEach(observer->observer.accept(newStatus));
 	}
