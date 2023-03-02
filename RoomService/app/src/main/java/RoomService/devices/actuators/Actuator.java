@@ -1,7 +1,7 @@
 package RoomService.devices.actuators;
 
-import RoomService.devices.Device;
+import RoomService.devices.ObservableDevice;
 
-public interface Actuator extends Device {
+public interface Actuator extends ObservableDevice {
 
 }
