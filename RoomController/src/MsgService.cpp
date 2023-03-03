@@ -14,6 +14,11 @@ void MsgService::sendMsg(bool ledState, int servoOpening) {
     serializeJson(doc, Serial);
 }
 
-bool isMessageAvailable();
+bool MsgService::isMessageAvailable() {
+    return this->messageAvailable;
+};
 
-Msg* receiveMsg();
+Msg* MsgService:: receiveMsg() {
+    this-> messageAvaible = false; 
+    return this->currentMsg;
+};
