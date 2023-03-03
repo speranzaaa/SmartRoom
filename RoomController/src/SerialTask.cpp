@@ -31,9 +31,9 @@ void SerialTask::tick() {
   this->read();
   if (this->service->isMessageAvailable) {
     this-> message = this->service-> receiveMsg();
-    if(this-> message ["Name"] == "Light") {
+    if(this-> message ["Name"] == "Lights") {
       this-> room -> setLedState(this-> message ["Value"]);
-    } else if (this-> message ["Name"] == "Servo") {
+    } else if (this-> message ["Name"] == "RollerBlinds") {
       this-> room -> setServoOpening(this-> message ["Value"]);
     }
   }
