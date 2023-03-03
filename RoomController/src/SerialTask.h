@@ -17,6 +17,8 @@ class SerialTask : public Task {
   private:
     SmartRoom* room;
     MsgService* service;
+    String content; 
+    DynamicJsonDocument message;
 }; 
 
 #endif
