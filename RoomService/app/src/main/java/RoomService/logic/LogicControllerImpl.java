@@ -10,7 +10,7 @@ import RoomService.mqtt.SensorBoardData;
 /**
  * Implementation of the {@link LogicController} interface.
  */
-public class LogicControllerImpl implements LogicController{
+public class LogicControllerImpl implements LogicController {
 
 	private static final LocalTime MORNING_THRESHOLD = LocalTime.of(8, 0);
 	private static final LocalTime EVENING_THRESHOLD = LocalTime.of(19, 0);

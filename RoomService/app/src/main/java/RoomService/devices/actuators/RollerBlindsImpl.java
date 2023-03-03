@@ -12,7 +12,7 @@ public class RollerBlindsImpl extends AbstractObservableDevice implements Roller
     }
 
 	@Override
-	public void setTo(int percentage) {
+	public synchronized void setTo(int percentage) {
 		if(percentage < 0 || percentage > 100) {
 			throw new IllegalArgumentException("The percentage must be an integer between 0 and 100.");
 		}
@@ -46,7 +46,7 @@ public class RollerBlindsImpl extends AbstractObservableDevice implements Roller
     }
 
     @Override
-    public int getOpenPercentage() {
+    public synchronized int getOpenPercentage() {
         return this.openPercentage;
     }
 

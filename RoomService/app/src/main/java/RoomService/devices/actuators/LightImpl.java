@@ -12,13 +12,13 @@ public class LightImpl extends AbstractObservableDevice implements Light {
     }
 
     @Override
-    public void turnOn(boolean on) {
+    public synchronized void turnOn(boolean on) {
         isOn = on;
         this.updateObservers(this.getCurrentStatus());
     }
 
     @Override
-    public boolean isOn() {
+    public synchronized boolean isOn() {
         return isOn;
     }
 
