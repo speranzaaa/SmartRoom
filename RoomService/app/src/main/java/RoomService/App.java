@@ -24,11 +24,29 @@ public class App {
 
     public static void main(String[] args) {
     	
-    	//----- DASHBOARD SERVER ------
+    // ---------- MODEL ----------
+    	
+    	//Create devices
+    	Map<String, Device> devices = new HashMap<>();
+    	
+    	//Create lights-subgroup
+    	Light light = new LightImpl("lights-subgroup");
+    	devices.put(light.getName(), light);
+    	
+    	//Create rollerblinds-subgroup
+    	RollerBlinds rollerblinds = new RollerBlindsImpl("rollerblinds-subgroup");
+    	devices.put(rollerblinds.getName(), rollerblinds);
+
+	// ----- DASHBOARD SERVER -----
+    	
     	DashboardServer s = new DashboardServer(PORT);
     	s.start();
+	
+    	// Update model on dashboard controls
+    	s.addControlObserver(new ModelController(devices));
     	
-    	//------ ACTIVITY LOGGER --------
+	// ----- ACTIVITY LOGGER ------
+    	
     	ObservableActivityLogger activityLogger = new ObservableActivityLoggerWrapper(new PersistentActivityLogger(ROOM_ACTIVITIES_LOG_PATH));
     	//send a new "SSE" Vert.x event on the server event bus. Then all client handlers receive the event and send the SSE message
     	activityLogger.addActivitiesObserver((activity)->s.sendSSEMessage(
@@ -37,23 +55,10 @@ public class App {
     					new Gson().toJson(activity))
     	));
     	
-    	//DEVICES
-    	Map<String, Device> devices = new HashMap<>();
-    	
-    	//------- LIGHTS SUBGROUP ------
-    	Light light = new LightImpl("lights-subgroup");
-    	devices.put(light.getName(), light);
     	//log new activities when lights status change
     	light.addStatusObserver((status)->activityLogger.logActivity(new ActivityImpl(light, status)));
-    	
-    	//------- ROLLERBLINDS -------
-    	RollerBlinds rollerblinds = new RollerBlindsImpl("rollerblinds-subgroup");
-    	devices.put(rollerblinds.getName(), rollerblinds);
     	//log new activities when rollerblinds status change
     	rollerblinds.addStatusObserver((status)->activityLogger.logActivity(new ActivityImpl(rollerblinds, status)));
-    	
-    	//------ REACT TO DASHBOARD CONTROLS -------
-    	//control model from DashBoard controls
-    	s.addControlObserver(new ModelController(devices));
+	
     }
 }
