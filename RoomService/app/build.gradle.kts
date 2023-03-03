@@ -31,6 +31,9 @@ dependencies {
 
     //google Gson
     implementation("com.google.code.gson:gson:2.10.1")
+    
+    // https://mvnrepository.com/artifact/io.github.java-native/jssc
+	implementation("io.github.java-native:jssc:2.9.4")
 
 }
 
