@@ -13,14 +13,16 @@ import RoomService.devices.actuators.LightImpl;
 import RoomService.devices.actuators.RollerBlinds;
 import RoomService.devices.actuators.RollerBlindsImpl;
 import RoomService.devices.controls.ModelController;
+import RoomService.utils.PortablePathBuilder;
 import RoomService.dashboardServer.DashboardServer;
 import RoomService.dashboardServer.SSEMessageImpl;
 
 public class App {
 	
 	final static int PORT = 80;
-	final static String SEP = System.getProperty("file.separator");
-	final static String ROOM_ACTIVITIES_LOG_PATH = "src" + SEP + "main" + SEP + "resources" + SEP + "roomActivities" + SEP + "activityLog.json";
+	final static String ROOM_ACTIVITIES_LOG_PATH = PortablePathBuilder
+			.fromStringPath("src/main/resources/roomActivities/activityLog.json")
+			.build();
 
     public static void main(String[] args) {
     	
