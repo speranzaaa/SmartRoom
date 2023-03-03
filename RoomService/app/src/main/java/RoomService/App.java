@@ -19,7 +19,8 @@ import RoomService.dashboardServer.SSEMessageImpl;
 public class App {
 	
 	final static int PORT = 80;
-	final static String ROOM_ACTIVITIES_LOG_PATH = "src/main/resources/roomActivities/activityLog.json";
+	final static String SEP = System.getProperty("file.separator");
+	final static String ROOM_ACTIVITIES_LOG_PATH = "src" + SEP + "main" + SEP + "resources" + SEP + "roomActivities" + SEP + "activityLog.json";
 
     public static void main(String[] args) {
     	
