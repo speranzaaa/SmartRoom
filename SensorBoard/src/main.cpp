@@ -89,10 +89,11 @@ void loop() {
     // Serial.println("Sensor data obtained, publishing to topic");
     char msg[MSG_BUFFER_SIZE];
     DynamicJsonDocument doc(128);
-    doc["isDay"] = currDay;
-    doc["isPresence"] = currPresence;
+    doc["day"] = currDay;
+    doc["presence"] = currPresence;
     serializeJson(doc, msg);
-    // serializeJson(doc, Serial);
+    serializeJson(doc, Serial);
+    Serial.print('\n');
     while (!client->connected()) {
         Serial.print("Attempting MQTT connection...");
         Serial.flush();
@@ -111,5 +112,5 @@ void loop() {
     }
     client->loop();
     client->publish(topic, msg);
-    delay(1000);
+    delay(10000);
 }

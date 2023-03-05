@@ -14,7 +14,6 @@ void LightTask(void* param) {
             delay(1000);
         }
         isDay = lightSensor->isDay();
-        Serial.println("Light sensor data updated");
         xSemaphoreGive(dayMutex);
         delay(500);
     }
