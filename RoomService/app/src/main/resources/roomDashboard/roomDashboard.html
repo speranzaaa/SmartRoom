@@ -9,8 +9,10 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/switchToggle.css">
     <link rel="stylesheet" href="css/slider.css">
+    <link rel="stylesheet" href="css/lightsActivities.css">
     <script src="scripts/activities.js" defer></script>
     <script src="scripts/control.js" defer></script>
+    <script src="scripts/lightsActivityWidget.js" defer></script>
 </head>
 <body>
     <header>
@@ -38,7 +40,13 @@
         </div>
         <div id="activities" class="section">
             <div id="lights-activity" class="activity card">
-                <h2>Lights activity</h2>
+                <div class="widget-header">
+                    <h2>Lights activity</h2>
+                    <div class="settings">
+                        <label for="nOfActivities">Show last: </label>
+                        <input id="nOfActivities" type="number" min="0" max="20" value="6">
+                    </div>
+                </div>
                 <ul id="activity-log"></ul>
             </div>
         </div>
