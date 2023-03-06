@@ -4,10 +4,9 @@
 #include "Task.h"
 #include "Utils.h"
 
-class Scheduler {
-  
-  static bool BTReceiving;
+extern bool BTReceiving;
 
+class Scheduler {
   int period;
   int taskTot;
   Task* taskList[MAX_TASKS];
@@ -17,8 +16,8 @@ public:
   void init();
   virtual bool addTask(Task* task);
   virtual void schedule();
-  static bool isBTReceiving();
-  static void setBTReceiving(bool BTReceiving);
+  bool isBTReceiving();
+  void setBTReceiving(bool BTReceiving);
 
 };
 

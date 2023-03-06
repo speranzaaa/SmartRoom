@@ -12,6 +12,7 @@ void MsgService::sendMsg(bool ledState, int servoOpening) {
     doc["Light"] = ledState;
     doc["Servo"] = servoOpening;
     serializeJson(doc, Serial);
+    Serial.println();
 }
 
 bool MsgService::isMessageAvailable() {
@@ -19,6 +20,6 @@ bool MsgService::isMessageAvailable() {
 };
 
 Msg* MsgService:: receiveMsg() {
-    this-> messageAvaible = false; 
+    this->messageAvailable = false; 
     return this->currentMsg;
 };

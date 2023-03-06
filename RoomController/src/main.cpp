@@ -8,6 +8,8 @@
 
 Scheduler scheduler(SCHEDULER_PERIOD);
 
+bool BTReceiving;
+
 void setup(){
   RollerBlinds* servo = new RollerBlinds(SERVOMOTOR_PIN);
   Led* led = new Led(LED_PIN);

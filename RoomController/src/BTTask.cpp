@@ -1,4 +1,7 @@
 #include "BTTask.h"
+#include "Scheduler.h"
+#include "Task.h"
+
 
 BTTask::BTTask(int rxPin, int txPin, SmartRoom* smartRoom) : 
   rxPin(rxPin), txPin(txPin), smartRoom(smartRoom) {}
@@ -13,7 +16,7 @@ void BTTask::init(int period){
   
 void BTTask::tick(){
   if(channel->available()){
-    Scheduler::setBTReceiving(true);
+    BTReceiving = true;
     char msgChar = (char)channel->read();
     String msg = "";
     
@@ -30,7 +33,7 @@ void BTTask::tick(){
     }
 
     bool isNumber = true;
-    for(int i = 0; i < msg.length(); i++){
+    for(unsigned int i = 0; i < msg.length(); i++){
       if(!isDigit(msg.charAt(i))){
         isNumber = false;
       }
@@ -42,7 +45,7 @@ void BTTask::tick(){
   }
   else{
     if(this->disconnectionTimer == 0){
-      Scheduler::setBTReceiving(false);
+      BTReceiving = false;
     }
     else{
       this->disconnectionTimer--;

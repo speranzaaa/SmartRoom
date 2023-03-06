@@ -8,17 +8,19 @@
 class SerialTask : public Task {
   
   public: 
-    SerialTask(int period, SmartRoom* room);  
+    SmartRoom* room;
+    MsgService* service;
+    String content; 
+    Msg* message;
+    SerialTask(SmartRoom* room);   
+
+    
+    void init(int period);
+    void tick();
 
   protected: 
     void write(bool ledState, int servoOpening);
     void read();
-  
-  private:
-    SmartRoom* room;
-    MsgService* service;
-    String content; 
-    DynamicJsonDocument message;
 }; 
 
 #endif

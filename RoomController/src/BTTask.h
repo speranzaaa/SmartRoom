@@ -7,6 +7,7 @@
 #include <Arduino.h>
 #include "Scheduler.h"
 
+extern bool BTReceiving;
 
 class BTTask : public Task {
   int rxPin;

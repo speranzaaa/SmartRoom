@@ -11,8 +11,8 @@ Scheduler::Scheduler(const unsigned long period) : period(period) {}
 
 void Scheduler::init() {
   timerFlag = false;
-  Scheduler::BTReceiving = false;
-  long period = 1000l*period;
+  BTReceiving = false;
+  long period = this->period;
   Timer1.initialize(period);
   Timer1.attachInterrupt(timerManager);
   taskTot = 0;
@@ -39,9 +39,9 @@ void Scheduler::schedule() {
 }
 
 bool Scheduler::isBTReceiving(){
-  return Scheduler::BTReceiving;
+  return BTReceiving;
 }
 
 void Scheduler::setBTReceiving(bool state){
-  Scheduler::BTReceiving = state;
+  BTReceiving = state;
 }
