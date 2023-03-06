@@ -2,11 +2,13 @@ const ctx = document.getElementById("usagechart").getContext("2d");
 const timeRangeSettings = document.getElementsByName("time-range");
 
 function getTimeRange() {
+    var timeRangeValue
     timeRangeSettings.forEach((radioButton) => {
         if(radioButton.checked) {
-            return radioButton.value;
+            timeRangeValue = radioButton.value;
         }
     })
+    return timeRangeValue;
 };
 
 function getUsage() {
@@ -40,5 +42,5 @@ new Chart(ctx, {
 });
 
 timeRangeSettings.forEach((radioButton) => {
-    radioButton.onclick = getUsage();
+    radioButton.onclick = getUsage;
 })
