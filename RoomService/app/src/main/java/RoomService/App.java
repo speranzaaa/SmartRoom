@@ -26,8 +26,8 @@ public class App {
 			.build();
 	
 	//devices of the room
-	final static Light lightsSubgroup = new LightImpl("lights-subgroup");
-	final static RollerBlinds rollerblindsSubgroup = new RollerBlindsImpl("rollerblinds-subgroup");
+	private final static Light lightsSubgroup = new LightImpl("lights-subgroup");
+	private final static RollerBlinds rollerblindsSubgroup = new RollerBlindsImpl("rollerblinds-subgroup");
 
     public static void main(String[] args) {
     	
