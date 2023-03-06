@@ -8,6 +8,15 @@
     font-size: small;
 }
 
+#lights-activity > div.widget-header .settings input[type="number"] {
+    border: none;
+    background-color: grey;
+    border-radius: .4em;
+    padding: .2em .4em;
+    color: white;
+    filter: drop-shadow(.1rem .1rem .1rem rgba(60, 60, 60, 0.404));
+}
+
 #lights-activity > div.widget-header .settings {
     opacity: 0;
     margin-bottom: 1rem;

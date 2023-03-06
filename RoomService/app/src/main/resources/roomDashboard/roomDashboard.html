@@ -10,9 +10,11 @@
     <link rel="stylesheet" href="css/switchToggle.css">
     <link rel="stylesheet" href="css/slider.css">
     <link rel="stylesheet" href="css/lightsActivities.css">
+    <link rel="stylesheet" href="css/lightsUsage.css">
     <script src="scripts/activities.js" defer></script>
     <script src="scripts/control.js" defer></script>
     <script src="scripts/lightsActivityWidget.js" defer></script>
+    <script src="scripts/lightsUsageWidget.js" defer></script>
 </head>
 <body>
     <header>
@@ -48,6 +50,34 @@
                     </div>
                 </div>
                 <ul id="activity-log"></ul>
+            </div>
+            <div id="lights-usage" class="activity card">
+                <div class="widget-header">
+                    <h2>Lights usage</h2>
+                    <div class="settings">
+                        <div id="time-range">
+                            <input id="day-period" name="time-range" type="radio" value="day" checked>
+                            <label for="day-period">Day</label>
+                            <input id="week-period" name="time-range" type="radio" value="week">
+                            <label for="week-period">Week</label>
+                            <input id="month-period" name="time-range" type="radio" value="month">
+                            <label for="month-period">Month</label>
+                            <input id="year-period" name="time-range" type="radio" value="year">
+                            <label for="year-period">Year</label>
+                        </div>
+                        <div id="period">
+                            <button>&lt</button>
+                            <label id="selected-period">Today</label>
+                            <button>&gt</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="usage-chart">
+                    <div>
+                        <canvas id="usagechart"></canvas>
+                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                      </div>
+                </div>
             </div>
         </div>
     </main>

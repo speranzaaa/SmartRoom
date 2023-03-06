@@ -1,4 +1,4 @@
-const recentLightActivities = [];
+const recentLightActivities = new Array();
 
 widget = {
     log: document.getElementById("activity-log"),
