@@ -12,8 +12,11 @@ import RoomService.devices.actuators.Light;
 import RoomService.devices.actuators.LightImpl;
 import RoomService.devices.actuators.RollerBlinds;
 import RoomService.devices.actuators.RollerBlindsImpl;
-import RoomService.devices.controls.ModelController;
+import RoomService.devices.controls.DashboardControlsHandler;
+import RoomService.logic.LogicControllerImpl;
+import RoomService.mqtt.MQTTAgent;
 import RoomService.utils.PortablePathBuilder;
+import io.vertx.core.Vertx;
 import RoomService.dashboardServer.DashboardServer;
 import RoomService.dashboardServer.SSEMessageImpl;
 
@@ -45,7 +48,7 @@ public class App {
     	s.start();
 	
     	// Update model on dashboard controls
-    	s.addControlObserver(new ModelController(devices));
+    	s.addControlObserver(new DashboardControlsHandler(devices));
     	
 	// ----- ACTIVITY LOGGER ------
     	
@@ -61,6 +64,11 @@ public class App {
     	light.addStatusObserver((status)->activityLogger.logActivity(new ActivityImpl(light, status)));
     	//log new activities when rollerblinds status change
     	rollerblinds.addStatusObserver((status)->activityLogger.logActivity(new ActivityImpl(rollerblinds, status)));
-	
+    	
+    // ------ ROOM LOGIC AND MQTT -------
+    	LogicControllerImpl logicController = new LogicControllerImpl(devices);
+    	Vertx vertx = Vertx.vertx();
+    	MQTTAgent agent = new MQTTAgent(logicController);
+		vertx.deployVerticle(agent);
     }
 }

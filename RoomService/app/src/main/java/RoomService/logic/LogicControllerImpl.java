@@ -1,10 +1,11 @@
 package RoomService.logic;
 
 import java.time.LocalTime;
+import java.util.Map;
+
+import RoomService.devices.Device;
 import RoomService.devices.actuators.Light;
-import RoomService.devices.actuators.LightImpl;
 import RoomService.devices.actuators.RollerBlinds;
-import RoomService.devices.actuators.RollerBlindsImpl;
 import RoomService.mqtt.SensorBoardData;
 
 /**
@@ -14,17 +15,14 @@ public class LogicControllerImpl implements LogicController {
 
 	private static final LocalTime MORNING_THRESHOLD = LocalTime.of(8, 0);
 	private static final LocalTime EVENING_THRESHOLD = LocalTime.of(19, 0);
-	
-	private final Light lightLed;
-	private final RollerBlinds rollerBlinds;
+	private final Map<String, Device> modelDevices;
 	private boolean hasFirstPersonEntered = false;
 	
 	/**
 	 * Creates a new instance of the {@link LogicControllerImpl} class.
 	 */
-	public LogicControllerImpl() {
-		this.lightLed = new LightImpl("lights-subgroup");
-		this.rollerBlinds = new RollerBlindsImpl("rollerblinds-subgroup");
+	public LogicControllerImpl(Map<String, Device> modelDevices) {
+		this.modelDevices = modelDevices;
 	}
 	
 	@Override
@@ -40,13 +38,14 @@ public class LogicControllerImpl implements LogicController {
 	 * @param presence boolean value indicating presence in the room
 	 */
 	private void updateLights(boolean presence) {
+		Light lightsSubgroup = (Light) this.modelDevices.get("lights-subgroup");
 		// If no one is in the room turn off the light
 		if (!presence) {
-			this.lightLed.turnOn(false);
+			lightsSubgroup.turnOn(false);
 			System.out.println("No one in the room, turning off lights.");
-		} else if (!this.lightLed.isOn()) {
+		} else if (!lightsSubgroup.isOn()) {
 			// If someone enters the room and the light was off, turn it on
-			this.lightLed.turnOn(true);
+			lightsSubgroup.turnOn(true);
 			System.out.println("Presence detected, turning on lights.");
 		}
 	}
@@ -57,6 +56,7 @@ public class LogicControllerImpl implements LogicController {
 	 */
 	private void updateRollerBlinds(final SensorBoardData data) {
 		final LocalTime currentTime = LocalTime.now();
+		RollerBlinds rollerblindsSubgroup = (RollerBlinds) this.modelDevices.get("rollerblinds-subgroup");
 		/*
 		 * If someone enters the room between MORNING_THRESHOLD and EVENING_THRESHOLD
 		 * for the first time today.
@@ -65,7 +65,7 @@ public class LogicControllerImpl implements LogicController {
 				&& currentTime.isBefore(EVENING_THRESHOLD)
 				&& !this.hasFirstPersonEntered) {
 			this.hasFirstPersonEntered = true;
-			this.rollerBlinds.openFully();
+			rollerblindsSubgroup.openFully();
 			System.out.println("First person has entered the room, opening blinds.");
 		}
 		/*
@@ -76,7 +76,7 @@ public class LogicControllerImpl implements LogicController {
 				|| currentTime.isBefore(MORNING_THRESHOLD))
 				&& !data.isPresenceDetected() && this.hasFirstPersonEntered) {
 			this.hasFirstPersonEntered = false;
-			this.rollerBlinds.close();
+			rollerblindsSubgroup.close();
 			System.out.println("No one in the room after 8:00 PM, closing blinds.");
 		}
 	}

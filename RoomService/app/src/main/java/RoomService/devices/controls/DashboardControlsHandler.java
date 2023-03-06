@@ -7,11 +7,11 @@ import RoomService.devices.actuators.Light;
 import RoomService.devices.actuators.RollerBlinds;
 import io.vertx.core.json.JsonObject;
 
-public class ModelController implements Consumer<JsonObject> {
+public class DashboardControlsHandler implements Consumer<JsonObject> {
 	
 	private final Map<String, Device> modelDevices;
 	
-	public ModelController(Map<String, Device> modelDevices) {
+	public DashboardControlsHandler(Map<String, Device> modelDevices) {
 		this.modelDevices = modelDevices;
 	}
 
@@ -28,5 +28,4 @@ public class ModelController implements Consumer<JsonObject> {
 				throw new IllegalArgumentException("The json object is an unknown control." + obj.toString());	
 		}
 	}
-
 }
