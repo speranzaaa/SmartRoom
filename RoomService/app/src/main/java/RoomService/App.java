@@ -30,7 +30,7 @@ public class App {
     public static void main(String[] args) {
     	
     // ---------- MODEL ----------
-    	
+    	System.out.println("Json Log File: " + ROOM_ACTIVITIES_LOG_PATH);
     	//Create devices
     	Map<String, Device> devices = new HashMap<>();
     	
