@@ -33,14 +33,14 @@ public class App {
     	
 	// ----- DASHBOARD SERVER -----
     	
-    	DashboardServer s = new DashboardServer(PORT);
-    	s.start();
+    	DashboardServer dashboardServer = new DashboardServer(PORT);
+    	dashboardServer.start();
     	
 	// ----- ACTIVITY LOGGER ------
     	
     	ObservableActivityLogger activityLogger = new ObservableActivityLoggerWrapper(new PersistentActivityLogger(ROOM_ACTIVITIES_LOG_PATH));
     	//send a new "SSE" Vert.x event on the server event bus. Then all client handlers receive the event and send the SSE message
-    	activityLogger.addActivitiesObserver((activity)->s.sendSSEMessage(
+    	activityLogger.addActivitiesObserver((activity)->dashboardServer.sendSSEMessage(
     			new SSEMessageImpl(
     					activity.getDevice().getName(), 
     					new Gson().toJson(activity))
@@ -53,7 +53,7 @@ public class App {
     	room.addActuator(rollerblindsSubgroup);
     	
     	// Update model on dashboard controls
-    	s.addControlObserver(new DashboardControlHandler(room));
+    	dashboardServer.addControlObserver(new DashboardControlHandler(room));
     	
     // ------ ROOM LOGIC -- MQTT CLIENT -------
     	LogicControllerImpl logicController = new LogicControllerImpl(room);
