@@ -1,12 +1,10 @@
 package RoomService.logic;
 
 import java.time.LocalTime;
-import java.util.Map;
-
-import RoomService.devices.Device;
 import RoomService.devices.actuators.Light;
 import RoomService.devices.actuators.RollerBlinds;
 import RoomService.mqtt.SensorBoardData;
+import RoomService.room.Room;
 
 /**
  * Implementation of the {@link LogicController} interface.
@@ -15,14 +13,14 @@ public class LogicControllerImpl implements LogicController {
 
 	private static final LocalTime MORNING_THRESHOLD = LocalTime.of(8, 0);
 	private static final LocalTime EVENING_THRESHOLD = LocalTime.of(19, 0);
-	private final Map<String, Device> modelDevices;
+	private final Room room;
 	private boolean hasFirstPersonEntered = false;
 	
 	/**
 	 * Creates a new instance of the {@link LogicControllerImpl} class.
 	 */
-	public LogicControllerImpl(Map<String, Device> modelDevices) {
-		this.modelDevices = modelDevices;
+	public LogicControllerImpl(Room room) {
+		this.room = room;
 	}
 	
 	@Override
@@ -38,7 +36,7 @@ public class LogicControllerImpl implements LogicController {
 	 * @param presence boolean value indicating presence in the room
 	 */
 	private void updateLights(boolean presence) {
-		Light lightsSubgroup = (Light) this.modelDevices.get("lights-subgroup");
+		Light lightsSubgroup = (Light) this.room.getDevice("lights-subgroup");
 		// If no one is in the room turn off the light
 		if (!presence) {
 			lightsSubgroup.turnOn(false);
@@ -56,7 +54,7 @@ public class LogicControllerImpl implements LogicController {
 	 */
 	private void updateRollerBlinds(final SensorBoardData data) {
 		final LocalTime currentTime = LocalTime.now();
-		RollerBlinds rollerblindsSubgroup = (RollerBlinds) this.modelDevices.get("rollerblinds-subgroup");
+		RollerBlinds rollerblindsSubgroup = (RollerBlinds) this.room.getDevice("rollerblinds-subgroup");
 		/*
 		 * If someone enters the room between MORNING_THRESHOLD and EVENING_THRESHOLD
 		 * for the first time today.

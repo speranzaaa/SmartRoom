@@ -1,10 +1,11 @@
 package RoomService.room;
 
 import RoomService.devices.Device;
+import RoomService.devices.actuators.Actuator;
 
 public interface Room {
 	
-	void addDevice(Device device);
+	void addActuator(Actuator device);
 	
 	void removeDevice(String deviceName);
 	
