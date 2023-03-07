@@ -2,9 +2,27 @@
 #include "MsgService.h"
 #include "ArduinoJson.h"
 
+String content;
+MsgService* msgService = new MsgService();
+
+void serialEvent() {
+   while(Serial.available()) {
+    char ch = (char)Serial.read();
+    if (ch == '\n') {
+      msgService->currentMsg = new Msg(content);
+      msgService->messageAvailable = true;
+    } else {
+      content += ch;
+    }
+  }
+}
+
 void MsgService::init() {
     Serial.begin(9600);
-    Serial.setTimeout(1);
+    content.reserve(256);
+    content = "";
+    this->currentMsg = NULL;
+    this->messageAvailable = false;
 }
 
 void MsgService::sendMsg(bool ledState, int servoOpening) {
@@ -15,11 +33,22 @@ void MsgService::sendMsg(bool ledState, int servoOpening) {
     Serial.println();
 }
 
+void MsgService::sendMsg(String msg) {
+    Serial.println(msg);
+}
+
 bool MsgService::isMessageAvailable() {
-    return this->messageAvailable;
+    return this->messageAvailable == true;
 };
 
-Msg* MsgService:: receiveMsg() {
-    this->messageAvailable = false; 
-    return this->currentMsg;
+Msg* MsgService::receiveMsg() {
+    if (this->isMessageAvailable()) {
+        Msg* msg = this->currentMsg;
+        this->messageAvailable = false;
+        this->currentMsg = NULL;
+        content = "";
+        return msg;
+    } else {
+        return NULL;
+    }
 };

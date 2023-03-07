@@ -4,10 +4,13 @@
 #include "SmartRoom.h"
 #include "MsgService.h"
 #include "Task.h"
+#include "ArduinoJson.h"
+
+extern MsgService* msgService;
 
 SerialTask::SerialTask(SmartRoom* smartRoom) {
   this->room = smartRoom;
-  this->service = new MsgService();
+  this->service = msgService;
 } 
 
 void SerialTask::init(int period) {
@@ -19,26 +22,19 @@ void SerialTask::write(bool ledState, int servoOpening) {
   this->service->sendMsg(ledState, servoOpening);
 }
 
-void SerialTask::read() {
-   while(Serial.available()) {
-    char ch = (char)Serial.read();
-    if (ch == '\n') {
-      this-> service->currentMsg = new Msg(this->content);
-      this->service->messageAvailable = true;
-    } else {
-      this->content += ch;
-    }
-  }
-}
 
 void SerialTask::tick() {
-  this->read();
-  if (this->service->isMessageAvailable()) {
-    this-> message = this->service->receiveMsg();
-    if(this-> message->getContent() ["deviceName"] == "Lights") {
-      this-> room -> setLedState(this->message->getContent()["deviceValue"]);
-    } else if (this-> message->getContent()  ["deviceName"] == "RollerBlinds") {
-      this-> room -> setServoOpening(this->message->getContent()["deviceValue"]);
+  Msg* msg = this->service->receiveMsg();
+  if (msg) {
+    String content = msg->getContent();
+    StaticJsonDocument<56> doc;
+    deserializeJson(doc, content);
+    if(doc["deviceName"] == "Lights") {
+      this->room->setLedState(doc["deviceValue"]);
+    } else if (doc["deviceName"] == "RollerBlinds") {
+      this->room->setServoOpening(doc["deviceValue"]);
     }
   }
+  this->write(room->getLedState(), room->getServoOpening());
+  delete msg;
 }

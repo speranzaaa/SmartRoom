@@ -5,13 +5,16 @@
 #include "ArduinoJson.h"
 
 class Msg {
-DynamicJsonDocument doc = DynamicJsonDocument(128); 
+
+private:
+    String msg;
+
 public:
     Msg(String content) {
-        deserializeJson(doc, content);
+        this->msg = content;
     }
-    DynamicJsonDocument getContent() {
-        return this->doc;
+    String getContent() {
+        return this->msg;
     }
 };
 
@@ -19,6 +22,7 @@ class MsgService {
 public:   
     void init();  
     void sendMsg(bool ledState, int servoOpening);
+    void sendMsg(String msg);
     bool isMessageAvailable();
     Msg* receiveMsg();
     Msg* currentMsg;
