@@ -6,7 +6,7 @@
 #define RX_BT_PIN 2
 #define TX_BT_PIN 3
 #define SERVOMOTOR_PIN 4
-#define LED_PIN 5
+#define LED_PIN 8
 
 /*____________________________*/
 
