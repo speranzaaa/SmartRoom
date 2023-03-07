@@ -1,7 +1,6 @@
 #include "LightSensor.h"
 #include <Arduino.h>
-#define __DEBUG__
-#define DAYLIGHT 3000
+#define DAYLIGHT 1500
 
 LightSensor::LightSensor(int pin) {
     this->pin = pin;

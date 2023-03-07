@@ -15,7 +15,6 @@ void PirTask(void* param) {
             delay(1000);
         }
         isPresenceDetected = pirSensor->isDetected();
-        Serial.println("Pir sensor data updated");
         xSemaphoreGive(presenceMutex);
         if (isPresenceDetected) {
             led->turnOn();

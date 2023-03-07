@@ -1,0 +1,47 @@
+#lights-usage div.widget-header div.settings {
+    display: flex;
+}
+
+#time-range {
+    flex-grow: 1;
+}
+
+#period {
+    opacity: 0;
+    font-size: .8em;
+    transition: opacity .4s;
+}
+
+#lights-usage:hover #period {
+    opacity: 100%;
+}
+
+#period button {
+    border: none;
+    background-color: grey;
+    color: white;
+    border-radius: .4em;
+    filter: drop-shadow(.1rem .1rem .1rem rgba(60, 60, 60, 0.404));
+    padding: .2em .6em;
+    text-align: center;
+    margin: 0 .6em;
+}
+
+#period button:active {
+    background-color: #006DFF;
+}
+
+#time-range input[type="radio"] {
+    display: none;
+}
+
+#time-range input[type="radio"] + label {
+    padding: .4em .6em;
+    border-radius: .6em;
+    font-size: .8em;
+}
+
+#time-range input[type="radio"]:checked + label {
+    background-color: #006DFF;
+    color: white;
+}

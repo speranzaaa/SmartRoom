@@ -36,6 +36,7 @@ public class DashboardServer extends AbstractVerticle {
 	private void setUpRoutes(Router router) {
 		router.route("/activities").produces("text/event-stream").handler(new SSEHandler(this.vertx.eventBus()));
 		router.route("/control").handler(new ControlHandler());
+		router.route("/usage").handler(new UsageHandler());
 		router.route().handler(new FileRequestHandler(RESOLUTION_PATH));
 	}
 
