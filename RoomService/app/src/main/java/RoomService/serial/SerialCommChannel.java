@@ -61,17 +61,17 @@ public class SerialCommChannel implements CommChannel, SerialPortEventListener {
 	public void serialEvent(SerialPortEvent serialPortEvent) {
 		if (serialPortEvent.isRXCHAR()) {
 			try {
-				String msg = this.serialPort.readHexString(serialPortEvent.getEventValue());
+				String msg = this.serialPort.readString(serialPortEvent.getEventValue());
 				msg = msg.replaceAll("\r", "");
 				this.currentMsg.append(msg);
 				boolean goAhead = true;
 				while (goAhead) {
-					String msg2 = currentMsg.toString();
+					String msg2 = this.currentMsg.toString();
 					int index = msg2.indexOf("\n");
 					if (index >= 0) {
 						this.queue.put(msg2.substring(0, index));
 						this.currentMsg = new StringBuffer("");
-						if (index + 1 < msg.length()) {
+						if (index + 1 < msg2.length()) {
 							this.currentMsg.append(msg2.substring(index + 1));
 						}
 					} else {
