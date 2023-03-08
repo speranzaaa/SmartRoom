@@ -39,6 +39,10 @@ public class LightImpl extends AbstractObservableDevice implements Light {
 		public LightStatus(final boolean on) {
 			this.on = on;
 		}
+		
+		public boolean wasOn() {
+			return this.on;
+		}
 
 		@Override
 		public String toString() {
