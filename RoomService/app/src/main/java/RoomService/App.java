@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import RoomService.activities.ObservableActivityLogger;
 import RoomService.activities.ObservableActivityLoggerWrapper;
 import RoomService.activities.PersistentActivityLogger;
+import RoomService.activities.usage.UsageReporterImpl;
 import RoomService.devices.actuators.Light;
 import RoomService.devices.actuators.LightImpl;
 import RoomService.devices.actuators.RollerBlinds;
@@ -45,6 +46,10 @@ public class App {
     					activity.getDevice().getName(), 
     					new Gson().toJson(activity))
     	));
+    	
+    // ---- USAGE REPORTER ----
+    	
+    	dashboardServer.setUsageReporter(new UsageReporterImpl(activityLogger));
     	
     // ---------- ROOM MODEL ----------
     	

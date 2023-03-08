@@ -6,17 +6,17 @@
     flex-grow: 1;
 }
 
-#period {
+#day {
     opacity: 0;
     font-size: .8em;
     transition: opacity .4s;
 }
 
-#lights-usage:hover #period {
+#lights-usage:hover #day {
     opacity: 100%;
 }
 
-#period button {
+#day button {
     border: none;
     background-color: grey;
     color: white;
@@ -27,8 +27,12 @@
     margin: 0 .6em;
 }
 
-#period button:active {
+#day button:active {
     background-color: #006DFF;
+}
+
+#selected-day {
+    user-select: none;
 }
 
 #time-range input[type="radio"] {
