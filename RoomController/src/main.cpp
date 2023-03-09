@@ -6,9 +6,9 @@
 #include "SerialTask.h"
 #include "Utils.h"
 
-Scheduler scheduler(SCHEDULER_PERIOD);
-
 bool BTReceiving;
+
+Scheduler scheduler;
 
 void setup(){
   RollerBlinds* servo = new RollerBlinds(SERVOMOTOR_PIN);
@@ -17,7 +17,7 @@ void setup(){
   SerialTask* serialTask = new SerialTask(smartRoom);
   BTTask* bttask = new BTTask(RX_BT_PIN, TX_BT_PIN, smartRoom);
 
-  scheduler.init();
+  scheduler.init(SCHEDULER_PERIOD);
   
   bttask->init(BT_PERIOD);
   scheduler.addTask(bttask);

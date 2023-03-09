@@ -4,21 +4,16 @@
 #include "Task.h"
 #include "Utils.h"
 
-extern bool BTReceiving;
-
 class Scheduler {
-  int period;
+  unsigned long period;
   int taskTot;
   Task* taskList[MAX_TASKS];
+  unsigned long tempo;
 
 public:
-  Scheduler(const unsigned long period);
-  void init();
+  void init(unsigned long period);
   virtual bool addTask(Task* task);
   virtual void schedule();
-  bool isBTReceiving();
-  void setBTReceiving(bool BTReceiving);
-
 };
 
 #endif
