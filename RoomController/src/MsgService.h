@@ -19,8 +19,11 @@ public:
 };
 
 class MsgService {    
+private:
+    String content;
 public:   
     void init();  
+    void readSerial();
     void sendMsg(bool ledState, int servoOpening);
     void sendMsg(String msg);
     bool isMessageAvailable();

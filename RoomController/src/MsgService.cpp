@@ -2,25 +2,22 @@
 #include "MsgService.h"
 #include "ArduinoJson.h"
 
-String content;
-MsgService* msgService = new MsgService();
-
-void serialEvent() {
+void MsgService::readSerial() {
    while(Serial.available()) {
     char ch = (char)Serial.read();
     if (ch == '\n') {
-      msgService->currentMsg = new Msg(content);
-      msgService->messageAvailable = true;
+      this->currentMsg = new Msg(this->content);
+      this->messageAvailable = true;
     } else {
-      content += ch;
+      this->content += ch;
     }
   }
 }
 
 void MsgService::init() {
     Serial.begin(9600);
-    content.reserve(256);
-    content = "";
+    this->content.reserve(256);
+    this->content = "";
     this->currentMsg = NULL;
     this->messageAvailable = false;
 }

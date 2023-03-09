@@ -6,11 +6,9 @@
 #include "Task.h"
 #include "ArduinoJson.h"
 
-extern MsgService* msgService;
-
 SerialTask::SerialTask(SmartRoom* smartRoom) {
   this->room = smartRoom;
-  this->service = msgService;
+  this->service = new MsgService();
 } 
 
 void SerialTask::init(int period) {
@@ -24,6 +22,7 @@ void SerialTask::write(bool ledState, int servoOpening) {
 
 
 void SerialTask::tick() {
+  this->service->readSerial();
   Msg* msg = this->service->receiveMsg();
   if (msg) {
     String content = msg->getContent();
@@ -35,6 +34,7 @@ void SerialTask::tick() {
       this->room->setServoOpening(doc["deviceValue"]);
     }
   }
-  this->write(room->getLedState(), room->getServoOpening());
+  // This is for testing ?
+  this->write(this->room->getLedState(), this->room->getServoOpening());
   delete msg;
 }
