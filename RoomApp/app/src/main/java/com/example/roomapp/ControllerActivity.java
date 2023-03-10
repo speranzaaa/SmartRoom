@@ -105,8 +105,10 @@ public class ControllerActivity extends AppCompatActivity {
             Log.e(C.TAG, "Error occurred when creating output stream", e);
         }
         runOnUiThread(() -> {
-            remoteButton.setEnabled(true);
-            remoteButton.setBackgroundColor(Color.GREEN);
+            onButton.setEnabled(true);
+            offButton.setEnabled(true);
+            onButton.setBackgroundColor(Color.GREEN);
+            offButton.setBackgroundColor(Color.GREEN);
             slider.setEnabled(true);
         });
     }

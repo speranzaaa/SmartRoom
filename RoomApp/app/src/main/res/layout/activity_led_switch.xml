@@ -7,7 +7,7 @@
     tools:context=".LedSwitchActivity">
 
     <Button
-        android:id="@+id/onbutton"
+        android:id="@+id/onButton"
         android:layout_width="347dp"
         android:layout_height="218dp"
         android:layout_marginStart="32dp"
