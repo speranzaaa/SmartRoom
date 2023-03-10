@@ -26,7 +26,8 @@ import java.nio.charset.StandardCharsets;
 public class ControllerActivity extends AppCompatActivity {
 
     private OutputStream bluetoothOutputStream;
-    private Button remoteButton;
+    private Button onButton;
+    private Button offButton;
     private Slider slider;
     private boolean ledState;
     private BluetoothClientConnectionThread connectionThread;
@@ -36,15 +37,18 @@ public class ControllerActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_controller);
-        ledState = true;
         initUI();
     }
 
     private void initUI() {
-        remoteButton = findViewById(R.id.remotebutton);
-        remoteButton.setBackgroundColor(Color.LTGRAY);
-        remoteButton.setEnabled(false);
-        remoteButton.setOnClickListener((v) -> sendLightMessage());
+        onButton = findViewById(R.id.onButton);
+        offButton = findViewById(R.id.offButton);
+        onButton.setBackgroundColor(Color.LTGRAY);
+        offButton.setBackgroundColor(Color.LTGRAY);
+        onButton.setEnabled(true);
+        onButton.setEnabled(true);
+        onButton.setOnClickListener((v) -> sendLightMessage(true));
+        offButton.setOnClickListener((v) -> sendLightMessage(false));
         slider = findViewById(R.id.discreteSlider);
         slider.setEnabled(false);
         slider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
@@ -70,14 +74,12 @@ public class ControllerActivity extends AppCompatActivity {
         });
     }
 
-    private void sendLightMessage() {
+    private void sendLightMessage(boolean ledState) {
         new Thread(() -> {
             try {
                 String message = "{\"Lights\":" + ledState + "}\n";
                 Log.e(C.TAG, message);
                 bluetoothOutputStream.write(message.getBytes(StandardCharsets.UTF_8));
-                ledState = !ledState;
-                runOnUiThread(() -> remoteButton.setBackgroundColor(ledState? Color.GREEN : Color.RED));
             } catch (IOException e) {
                 e.printStackTrace();
             }
