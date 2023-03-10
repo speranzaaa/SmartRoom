@@ -73,8 +73,7 @@ public class ControllerActivity extends AppCompatActivity {
     private void sendLightMessage() {
         new Thread(() -> {
             try {
-                Integer ledStateInt = ledState ? 1 : 0;
-                String message = "{\"light\":" + ledStateInt.toString() + "}\n";
+                String message = "{\"light\":" + ledState + "}\n";
                 Log.e(C.TAG, message);
                 bluetoothOutputStream.write(message.getBytes(StandardCharsets.UTF_8));
                 ledState = !ledState;
