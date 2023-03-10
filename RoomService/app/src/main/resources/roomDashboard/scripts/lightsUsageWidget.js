@@ -3,6 +3,23 @@ const ctx = document.getElementById("usagechart").getContext("2d");
 //data to display in chart
 var usageData = [];
 
+//chart
+chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        datasets: [{
+            data: usageData,
+            backgroundColor: '#0350C0',
+        }]
+    },
+    options: {
+        scales: {
+            y: {beginAtZero: true, grid: {display: false}},
+            x: {grid: {display: false}}
+        }
+    }
+});
+
 //widget settings object
 const settings = {
     timeRange: {
@@ -91,14 +108,13 @@ settings.timeRange.timeRangeRadio.forEach((radioButton) => {
 //request usage data to server
 function updateUsageData() {
     var httpReq = new XMLHttpRequest();
-    httpReq.onreadystatechange = () => {
+    httpReq.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             usageData.length = 0;
             JSON.parse(httpReq.responseText).forEach(dataPoint => {
                usageData.push(dataPoint); 
             })
             chart.update();
-            console.log(usageData);
         } else if(this.status == 500) {
             console.log("Cannot get usage data from server!");
         }
@@ -109,22 +125,6 @@ function updateUsageData() {
 }
 
 updateUsageData();
-
-chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        datasets: [{
-            data: usageData,
-            backgroundColor: '#0350C0',
-        }]
-    },
-    options: {
-        scales: {
-            y: {beginAtZero: true, grid: {display: false}},
-            x: {grid: {display: false}}
-        }
-    }
-});
 
 /* timeRangeSettings.forEach((radioButton) => {
     radioButton.onclick = updateUsageData;

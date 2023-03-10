@@ -15,6 +15,6 @@ public interface UsageAnalyzer {
 	
 	UsageAnalyzer groupBy(TimeRange timeRange);
 	
-	Map<String, Number> getUsage();
+	Map<String, Long> getSecondsOfUsage();
 
 }

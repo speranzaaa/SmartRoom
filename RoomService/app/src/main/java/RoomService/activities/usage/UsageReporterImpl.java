@@ -3,8 +3,6 @@ package RoomService.activities.usage;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 import RoomService.activities.ActivityLogger;
 import RoomService.activities.usage.UsageAnalyzer.TimeRange;
 import io.vertx.core.eventbus.Message;
@@ -18,21 +16,21 @@ public class UsageReporterImpl implements UsageReporter {
 	public UsageReporterImpl(ActivityLogger activityLogger) {
 		this.activityLogger = activityLogger;
 	}
-
+	
 	private JsonArray getUsage(TimeRange timeRange, Date fromDate, Date toDate) {
-		Map<String, Number> usage = new LightUsageAnalyzer(activityLogger)
+		Map<String, Long> usage = new LightUsageAnalyzer(activityLogger)
 			.setTarget("lights-subgroup")
 			.fromDate(fromDate)
 			.toDate(toDate)
 			.groupBy(timeRange)
-			.getUsage();
+			.getSecondsOfUsage();
 		
 		JsonArray jsonUsage = new JsonArray();
 		
 		usage.entrySet()
 			.stream()
 			.forEachOrdered((entry)->{
-				jsonUsage.add(new JsonObject().put("x", entry.getKey()).put("y", TimeUnit.MILLISECONDS.toSeconds(entry.getValue().longValue())));
+				jsonUsage.add(new JsonObject().put("x", entry.getKey()).put("y", entry.getValue()));
 			});
 		
 		return jsonUsage;
@@ -72,9 +70,6 @@ public class UsageReporterImpl implements UsageReporter {
 				fromDate = cal.getTime();
 				break;
 		}
-		
-		System.out.println("FROM: " + fromDate + " TO: " + toDate);
-		
 		msg.reply(this.getUsage(timeRange, fromDate, toDate));
 	}
 }

@@ -21,8 +21,7 @@ public class UsageHandler implements Handler<RoutingContext> {
 			if(result.failed()) {
 				ctx.response().setStatusCode(500).end();
 			} else {
-				System.out.println(result.result().body().toString());
-				ctx.response().end(result.result().body().toString());
+				ctx.response().setStatusCode(200).end(result.result().body().toString());
 			}
 		});
 		

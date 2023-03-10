@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import RoomService.activities.Activity;
@@ -14,20 +15,18 @@ import RoomService.devices.actuators.LightImpl.LightStatus;
 public class LightUsageAnalyzer implements UsageAnalyzer {
 	
 	private final ActivityLogger activityLogger;
-	private final SumMap<String, Double> usage;
+	private final SumMap<String, Long> secondsOfUsage;
 	private String target;
 	private Date fromDate;
 	private Date toDate;
 	private TimeRange groupBy;
-	private long calcMs = 0;
-	private long turnOnTimestamp = 0;
+	private long activitySeconds;
+	private long turnOnTimestamp;
 	private boolean lastWasOn = false;
-	
-	private int deb = 1;
 
-		public LightUsageAnalyzer(ActivityLogger activityLogger) {
+	public LightUsageAnalyzer(ActivityLogger activityLogger) {
 		this.activityLogger = activityLogger;
-		this.usage = new LinkedHashDoubleSumMap<>();
+		this.secondsOfUsage = new OrderedLongSumMap<>();
 	}
 
 	@Override
@@ -81,7 +80,7 @@ public class LightUsageAnalyzer implements UsageAnalyzer {
 			case YEAR:
 				String.valueOf(cal.get(Calendar.YEAR));
 		}
-		return "";
+		return "Unknown";
 	}
 	
 	private boolean canBuild() {
@@ -89,10 +88,11 @@ public class LightUsageAnalyzer implements UsageAnalyzer {
 	}
 
 	@Override
-	public Map<String, Number> getUsage() {
+	public Map<String, Long> getSecondsOfUsage() {
 		if(!canBuild()) {
 			throw new IllegalStateException("Cannot build. Please, set all parameters first!");
 		}
+		//filter target activities and divide for period.
 		Map<String, List<Activity>> dividedActivities = this.activityLogger
 			.getActivities()
 			.stream()
@@ -107,7 +107,7 @@ public class LightUsageAnalyzer implements UsageAnalyzer {
 		dividedActivities.keySet().forEach((key->{
 			System.out.println("\n\n\nKEY: " + key);
 			System.out.println("\n\n\n" + dividedActivities.get(key));
-			calcMs = 0;
+			activitySeconds = 0;
 			turnOnTimestamp = 0;
 			lastWasOn = false;
 			dividedActivities.get(key)
@@ -118,13 +118,13 @@ public class LightUsageAnalyzer implements UsageAnalyzer {
 						turnOnTimestamp = activity.getTimestamp().getTime();
 						lastWasOn = true;
 					} else if(!((LightStatus)activity.getStatus()).wasOn() && lastWasOn) {
-						calcMs += (activity.getTimestamp().getTime()-turnOnTimestamp);
+						activitySeconds += TimeUnit.MILLISECONDS.toSeconds(activity.getTimestamp().getTime()-turnOnTimestamp);
 						lastWasOn = false;
-						usage.put(key, Double.valueOf(calcMs));
+						secondsOfUsage.put(key, activitySeconds);
 					}
 				});
 		}));
-		return Collections.unmodifiableMap(this.usage);
+		return Collections.unmodifiableMap(this.secondsOfUsage);
 	}
 	
 	private enum DAYS {
