@@ -3,19 +3,23 @@
 #include "Task.h"
 
 
-BTTask::BTTask(int rxPin, int txPin, SmartRoom* smartRoom) : 
-  rxPin(rxPin), txPin(txPin), smartRoom(smartRoom) {}
+BTTask::BTTask(int rxPin, int txPin, SmartRoom* smartRoom, int disconnectionTimer) {
+  this->txPin = txPin;
+  this->rxPin = rxPin;
+  this->smartRoom = smartRoom;
+  this->disconnectionTimer = disconnectionTimer;
+  this->currentDiscTimer = disconnectionTimer;
+}
   
 void BTTask::init(int period){
   Task::init(period);
   channel = new SoftwareSerial(rxPin, txPin);
   channel->begin(9600);
-
-  this->disconnectionTimer = disconectionTimerExpiry;
 }
   
 void BTTask::tick(){
   if(channel->available()){
+    this->currentDiscTimer = this->disconnectionTimer;
     BTReceiving = true;
     char msgChar = (char)channel->read();
     String msg = "";
@@ -44,11 +48,11 @@ void BTTask::tick(){
     
   }
   else{
-    if(this->disconnectionTimer == 0){
+    if(this->currentDiscTimer == 0){
       BTReceiving = false;
     }
     else{
-      this->disconnectionTimer--;
+      this->currentDiscTimer--;
     }
   }
 }

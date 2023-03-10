@@ -16,10 +16,10 @@ class BTTask : public Task {
   SmartRoom* smartRoom;
 
   int disconnectionTimer;
-  int disconectionTimerExpiry;
+  int currentDiscTimer;
 
 public:
-  BTTask(int rxPin, int txPin, SmartRoom* smartRoom);  
+  BTTask(int rxPin, int txPin, SmartRoom* smartRoom, int disconnectionTimer);  
   void init(int period);  
   void tick();
 };
