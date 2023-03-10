@@ -59,7 +59,7 @@ public class ControllerActivity extends AppCompatActivity {
                 new Thread(() -> {
                     try {
                         Integer value = Math.round(slider.getValue());
-                        String message = "{\"angle\":" + Integer.toString(Math.round(slider.getValue())) + "}\n";
+                        String message = "{\"RollerBlinds\":" + Integer.toString(Math.round(slider.getValue())) + "}\n";
                         Log.e(C.TAG, message);
                         bluetoothOutputStream.write(message.getBytes(StandardCharsets.UTF_8));
                     } catch (IOException e) {
@@ -73,7 +73,7 @@ public class ControllerActivity extends AppCompatActivity {
     private void sendLightMessage() {
         new Thread(() -> {
             try {
-                String message = "{\"light\":" + ledState + "}\n";
+                String message = "{\"Lights\":" + ledState + "}\n";
                 Log.e(C.TAG, message);
                 bluetoothOutputStream.write(message.getBytes(StandardCharsets.UTF_8));
                 ledState = !ledState;

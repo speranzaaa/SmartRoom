@@ -1,6 +1,7 @@
 #include "BTTask.h"
 #include "Scheduler.h"
 #include "Task.h"
+#include <ArduinoJson.h>
 
 
 BTTask::BTTask(int rxPin, int txPin, SmartRoom* smartRoom, int disconnectionTimer) {
@@ -29,7 +30,21 @@ void BTTask::tick(){
       msgChar = (char)channel->read();
     }
 
-    if(msg == "on"){
+    StaticJsonDocument<56> doc;
+    deserializeJson(doc, msg);
+
+    if(doc["Lights"] ==  true) {
+      smartRoom->setLedState(true);
+    } else if (doc["Lights"] == false) {
+      smartRoom->setLedState(false);
+    } 
+
+    int servoOpening = doc["RollerBlinds"];
+    if(servoOpening >= 0 && servoOpening <= 100){
+      smartRoom->setServoOpening(servoOpening);
+    }
+  
+    /*if(msg == "on"){
       smartRoom->setLedState(true);
     }
     else if(msg == "off"){
@@ -44,8 +59,7 @@ void BTTask::tick(){
     }
     if(isNumber){
       smartRoom->setServoOpening(msg.toInt());
-    }
-    
+    } */
   }
   else{
     if(this->currentDiscTimer == 0){
