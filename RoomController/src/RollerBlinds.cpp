@@ -5,7 +5,7 @@ RollerBlinds::RollerBlinds(const int pin) : Component(pin) , Servo(){
 }
 
 void RollerBlinds::move(int percentage) {
-  int newAngle = map(percentage, 0, 100, 180, 0)+180;
+  int newAngle = (180*percentage)/100;
   this->angle = newAngle;
   this->write(newAngle);
 }
@@ -15,5 +15,5 @@ int RollerBlinds::getAngle() {
 }
 
 int RollerBlinds::getOpeningPercentage(){
-  return map(this->angle, 0, 180, 100, 0)+180;
-}
+  return (this->angle*100)/180;
+  }
