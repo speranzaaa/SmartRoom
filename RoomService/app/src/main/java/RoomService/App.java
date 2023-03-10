@@ -57,6 +57,9 @@ public class App {
     	room.addActuator(lightsSubgroup);
     	room.addActuator(rollerblindsSubgroup);
     	
+    	//set room in dashboard server for init!
+    	dashboardServer.setRoom(room);
+    	
     	// Update model on dashboard controls
     	dashboardServer.addControlObserver(new DashboardControlHandler(room));
     	

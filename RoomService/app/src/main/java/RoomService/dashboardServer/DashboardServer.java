@@ -4,7 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import com.google.gson.Gson;
+
 import RoomService.activities.usage.UsageReporter;
+import RoomService.room.Room;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.MessageConsumer;
@@ -22,6 +25,7 @@ public class DashboardServer extends AbstractVerticle {
 	private final Router router;
 	private final Set<Consumer<JsonObject>> controlsObservers = new HashSet<>();
 	private MessageConsumer<JsonObject> usageReporter;
+	private Room room;
 	
 	public DashboardServer(int port) {
 		this.port = port;
@@ -35,9 +39,17 @@ public class DashboardServer extends AbstractVerticle {
 				consumer.accept(jsonMessage);
 			});
 		});
+		this.vertx.eventBus().consumer("init", (message)-> {
+			JsonObject reply = new JsonObject();
+			room.getDevices().forEach((name, device)->{
+				reply.put(name, new JsonObject(new Gson().toJson(device.getCurrentStatus())));
+			});
+			message.reply(reply);
+		});
 	}
 
 	private void setUpRoutes(Router router) {
+		router.route("/init").handler(new InitHandler());
 		router.route("/activities").produces("text/event-stream").handler(new SSEHandler(this.vertx.eventBus()));
 		router.route("/control").handler(new ControlHandler());
 		router.route("/usage").handler(new UsageHandler());
@@ -66,5 +78,9 @@ public class DashboardServer extends AbstractVerticle {
 			this.usageReporter.unregister();
 		}
 		this.usageReporter = this.vertx.eventBus().consumer("usage", usageReporter);
+	}
+	
+	public void setRoom(Room room) {
+		this.room = room;
 	}
 }

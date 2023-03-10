@@ -105,8 +105,6 @@ public class LightUsageAnalyzer implements UsageAnalyzer {
 			}).collect(Collectors.groupingBy(activity->classificate(activity)));
 		
 		dividedActivities.keySet().forEach((key->{
-			System.out.println("\n\n\nKEY: " + key);
-			System.out.println("\n\n\n" + dividedActivities.get(key));
 			activitySeconds = 0;
 			turnOnTimestamp = 0;
 			lastWasOn = false;

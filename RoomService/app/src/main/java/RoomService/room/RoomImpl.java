@@ -1,5 +1,6 @@
 package RoomService.room;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +32,11 @@ public class RoomImpl implements Room {
 	@Override
 	public Device getDevice(String deviceName) {
 		return this.devices.get(deviceName);
+	}
+
+	@Override
+	public Map<String, Device> getDevices() {
+		return Collections.unmodifiableMap(this.devices);
 	}
 
 }
