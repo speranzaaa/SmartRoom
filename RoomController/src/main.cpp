@@ -15,14 +15,14 @@ void setup(){
   Led* led = new Led(LED_PIN);
   SmartRoom* smartRoom = new SmartRoom(servo, led);
   SerialTask* serialTask = new SerialTask(smartRoom);
-  BTTask* bttask = new BTTask(RX_BT_PIN, TX_BT_PIN, smartRoom);
+  serialTask->init(SERIAL_PERIOD);
+  BTTask* bttask = new BTTask(RX_BT_PIN, TX_BT_PIN, smartRoom, 10);
+  bttask->init(BT_PERIOD);
 
   scheduler.init(SCHEDULER_PERIOD);
   
-  bttask->init(BT_PERIOD);
   scheduler.addTask(bttask);
 
-  serialTask->init(SERIAL_PERIOD);
   scheduler.addTask(serialTask);
 }
 
