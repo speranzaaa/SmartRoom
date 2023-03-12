@@ -42,8 +42,8 @@ public class UsageReporterImpl implements UsageReporter {
 		
 		String date[] = query.getString("day").split("/");
 		Calendar cal = Calendar.getInstance();
-		cal.set(Integer.valueOf(date[2]), Integer.valueOf(date[1])-1, Integer.valueOf(date[0]));
-		
+		cal.clear();
+		cal.set(Integer.valueOf(date[2]), Integer.valueOf(date[1])-1, Integer.valueOf(date[0])+1);
 		Date toDate = cal.getTime();
 		Date fromDate = null;
 		TimeRange timeRange = TimeRange.DAY;
@@ -51,22 +51,22 @@ public class UsageReporterImpl implements UsageReporter {
 		switch(query.getString("timeRange").toLowerCase()) {
 			case "day":
 				timeRange = TimeRange.HOUR;
-				cal.set(Integer.valueOf(date[2]), Integer.valueOf(date[1])-1, Integer.valueOf(date[0])-1);
+				cal.set(Integer.valueOf(date[2]), Integer.valueOf(date[1])-1, Integer.valueOf(date[0]));
 				fromDate = cal.getTime();
 				break;
 			case "week":
 				timeRange = TimeRange.DAY_OF_WEEK;
-				cal.set(Integer.valueOf(date[2]), Integer.valueOf(date[1])-1, Integer.valueOf(date[0])-7);
+				cal.set(Integer.valueOf(date[2]), Integer.valueOf(date[1])-1, Integer.valueOf(date[0])-6);
 				fromDate = cal.getTime();
 				break;
 			case "month":
 				timeRange = TimeRange.DAY;
-				cal.set(Integer.valueOf(date[2]), Integer.valueOf(date[1])-2, Integer.valueOf(date[0]));
+				cal.set(Integer.valueOf(date[2]), Integer.valueOf(date[1])-2, Integer.valueOf(date[0])+1);
 				fromDate = cal.getTime();
 				break;
 			case "year":
 				timeRange = TimeRange.MONTH;
-				cal.set(Integer.valueOf(date[2])-1, Integer.valueOf(date[1])-1, Integer.valueOf(date[0]));
+				cal.set(Integer.valueOf(date[2])-1, Integer.valueOf(date[1])-1, Integer.valueOf(date[0])+1);
 				fromDate = cal.getTime();
 				break;
 		}

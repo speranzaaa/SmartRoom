@@ -29,4 +29,5 @@ input[type="range"].slider::-webkit-slider-thumb {
     border-radius: 11.5px;
     border: grey solid .1rem;
     background-color: white;
+    transition: scale .2s ease;
 }

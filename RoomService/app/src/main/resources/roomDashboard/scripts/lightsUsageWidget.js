@@ -8,6 +8,7 @@ chart = new Chart(ctx, {
     type: 'bar',
     data: {
         datasets: [{
+            label: "usage",
             data: usageData,
             backgroundColor: '#0350C0',
         }]
@@ -16,6 +17,11 @@ chart = new Chart(ctx, {
         scales: {
             y: {beginAtZero: true, grid: {display: false}},
             x: {grid: {display: false}}
+        },
+        plugins: {
+            legend: {
+              display: false
+            }
         }
     }
 });

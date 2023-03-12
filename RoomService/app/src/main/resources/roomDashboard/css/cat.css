@@ -1,0 +1,13 @@
+#cat {
+    position: absolute;
+    width: 11em;
+}
+
+input[type="range"].slider.cat::-webkit-slider-thumb {
+    border: 0;
+    background-image: url("../res/redWool.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: rgba(0, 0, 0, 0);
+    scale: 1.8;
+}

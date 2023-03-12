@@ -67,7 +67,7 @@ public class LightUsageAnalyzer implements UsageAnalyzer {
 	
 	private String classificate(Activity activity) {
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(activity.getTimestamp());
+		cal.setTimeInMillis(activity.getTimestamp().getTime());
 		switch(this.groupBy) {
 			case HOUR:
 				return String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
