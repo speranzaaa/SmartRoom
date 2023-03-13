@@ -12,7 +12,7 @@ public class CommandGeneratorImpl implements CommandGenerator {
 	@Override
 	public String createCommand(LightStatus status) {
 		final String statusString = status.toString();
-		final Boolean statusBool = statusString.substring(6) == "On"
+		final Boolean statusBool = statusString.substring(6).equals("On")
 				? Boolean.TRUE : Boolean.FALSE;
 		final Command<Boolean> command = new Command<Boolean>("Lights", statusBool);
 		return this.gson.toJson(command);
