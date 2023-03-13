@@ -22,7 +22,6 @@ public class SerialStatusMessenger {
 	 * @param status the {@link LightStatus} that will generate the message
 	 */
 	public String sendUpdate(final LightStatus status) {
-		System.out.println("status in sendUpdate: " + status);
 		final String msg = this.generator.createCommand(status);
 		this.channel.sendMsg(msg);
 		return msg;
