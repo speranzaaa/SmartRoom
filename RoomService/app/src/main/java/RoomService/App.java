@@ -25,6 +25,7 @@ public class App {
 	final static String ROOM_ACTIVITIES_LOG_PATH = PortablePathBuilder
 			.fromStringPath("src/main/resources/roomActivities/activityLog.json")
 			.build();
+	final static String SERIAL_PORT = "/dev/ttyACM0";
 	
 	//devices of the room
 	private final static Light lightsSubgroup = new LightImpl("lights-subgroup");
@@ -52,21 +53,24 @@ public class App {
     	dashboardServer.setUsageReporter(new UsageReporterImpl(activityLogger));
     	
     // ---------- ROOM MODEL ----------
-    	
-    	Room room = new RoomImpl(activityLogger);
-    	room.addActuator(lightsSubgroup);
-    	room.addActuator(rollerblindsSubgroup);
-    	
-    	//set room in dashboard server for init!
-    	dashboardServer.setRoom(room);
-    	
-    	// Update model on dashboard controls
-    	dashboardServer.addControlObserver(new DashboardControlHandler(room));
-    	
-    // ------ ROOM LOGIC -- MQTT CLIENT -------
-    	LogicControllerImpl logicController = new LogicControllerImpl(room);
-    	Vertx vertx = Vertx.vertx();
-    	MQTTAgent agent = new MQTTAgent(logicController);
-		vertx.deployVerticle(agent);
+    	try {
+    		Room room = new RoomImpl(activityLogger);
+    		room.addActuator(lightsSubgroup);
+    		room.addActuator(rollerblindsSubgroup);
+    		
+    		//set room in dashboard server for init!
+    		dashboardServer.setRoom(room);
+    		
+    		// Update model on dashboard controls
+    		dashboardServer.addControlObserver(new DashboardControlHandler(room));
+    		
+    		// ------ ROOM LOGIC -- MQTT CLIENT -------
+    		LogicControllerImpl logicController = new LogicControllerImpl(room);
+    		Vertx vertx = Vertx.vertx();
+    		MQTTAgent agent = new MQTTAgent(logicController);
+    		vertx.deployVerticle(agent);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
     }
 }
