@@ -22,25 +22,6 @@ header h1 {
     margin-left: 1em;
 }
 
-/* nav {
-    flex-grow: 1;
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    margin-right: 20px;
-}
-
-nav a {
-    list-style: none;
-    text-decoration: none;
-    color: rgb(40, 40, 40);
-    padding: 10px;
-}
-
-nav a:hover {
-    color: #0050C0
-} */
-
 main {
     margin-top: 1.5rem;
     display: grid;
