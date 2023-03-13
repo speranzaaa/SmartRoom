@@ -4,6 +4,9 @@ import java.util.concurrent.*;
 import jssc.*;
 
 public class SerialCommChannel implements CommChannel, SerialPortEventListener {
+	
+	private static String SERIAL_PORT = "/dev/ttyACM0";
+	private static int BAUD_RATE = 9600;
 
 	private final SerialPort serialPort;
 	private final BlockingQueue<String> queue;
@@ -18,6 +21,10 @@ public class SerialCommChannel implements CommChannel, SerialPortEventListener {
 		this.serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN
 				| SerialPort.FLOWCONTROL_RTSCTS_OUT);
 		this.serialPort.addEventListener(this);
+	}
+	
+	public SerialCommChannel() throws Exception {
+		this(SerialCommChannel.SERIAL_PORT, SerialCommChannel.BAUD_RATE);
 	}
 	
 	@Override
