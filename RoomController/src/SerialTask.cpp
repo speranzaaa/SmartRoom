@@ -6,9 +6,9 @@
 #include "Task.h"
 #include "ArduinoJson.h"
 
-SerialTask::SerialTask(SmartRoom* smartRoom) {
+SerialTask::SerialTask(SmartRoom* smartRoom, MsgService* service) {
   this->room = smartRoom;
-  this->service = new MsgService();
+  this->service = service;
 } 
 
 void SerialTask::init(int period) {
@@ -33,7 +33,7 @@ void SerialTask::tick() {
     } else if (doc["deviceName"] == "RollerBlinds") {
       this->room->setServoOpening(doc["deviceValue"]);
     }
-  }
+ }
   // this->write(this->room->getLedState(), this->room->getServoOpening());
   delete msg;
 }

@@ -6,6 +6,7 @@
 #include "SoftwareSerial.h"
 #include <Arduino.h>
 #include "Scheduler.h"
+#include "MsgService.h"
 
 extern bool BTReceiving;
 
@@ -14,12 +15,13 @@ class BTTask : public Task {
   int txPin;
   SoftwareSerial* channel;
   SmartRoom* smartRoom;
+  MsgService* service;
 
   int disconnectionTimer;
   int currentDiscTimer;
 
 public:
-  BTTask(int rxPin, int txPin, SmartRoom* smartRoom, int disconnectionTimer);  
+  BTTask(int rxPin, int txPin, MsgService* service, SmartRoom* smartRoom, int disconnectionTimer);  
   void init(int period);  
   void tick();
 };

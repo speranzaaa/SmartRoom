@@ -12,7 +12,8 @@ class SerialTask : public Task {
     MsgService* service;
     String content; 
     Msg* message;
-    SerialTask(SmartRoom* room);   
+
+    SerialTask(SmartRoom* room, MsgService* service);   
 
     
     void init(int period);
@@ -20,7 +21,6 @@ class SerialTask : public Task {
 
   protected: 
     void write(bool ledState, int servoOpening);
-    void read();
 }; 
 
 #endif

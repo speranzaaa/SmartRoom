@@ -2,11 +2,13 @@
 #include "Scheduler.h"
 #include "Task.h"
 #include <ArduinoJson.h>
+#include "MsgService.h"
 
 
-BTTask::BTTask(int rxPin, int txPin, SmartRoom* smartRoom, int disconnectionTimer) {
+BTTask::BTTask(int rxPin, int txPin, MsgService* service, SmartRoom* smartRoom, int disconnectionTimer) {
   this->txPin = txPin;
   this->rxPin = rxPin;
+  this->service = service;
   this->smartRoom = smartRoom;
   this->disconnectionTimer = disconnectionTimer;
   this->currentDiscTimer = disconnectionTimer;
@@ -43,23 +45,8 @@ void BTTask::tick(){
     if(servoOpening >= 0 && servoOpening <= 100){
       smartRoom->setServoOpening(servoOpening);
     }
-  
-    /*if(msg == "on"){
-      smartRoom->setLedState(true);
-    }
-    else if(msg == "off"){
-      smartRoom->setLedState(false);
-    }
 
-    bool isNumber = true;
-    for(unsigned int i = 0; i < msg.length(); i++){
-      if(!isDigit(msg.charAt(i))){
-        isNumber = false;
-      }
-    }
-    if(isNumber){
-      smartRoom->setServoOpening(msg.toInt());
-    } */
+    service->sendMsg(smartRoom->getLedState(), smartRoom->getServoOpening());
   }
   else{
     if(this->currentDiscTimer == 0){
