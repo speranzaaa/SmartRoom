@@ -1,4 +1,0 @@
-- 2 task di esp (1 per ogni sensore)
-- al task viene passato il sensore
-- il task legge i dati del sensore e li manda tramite mqtt
-- il client mqtt e' condiviso tra i task, viene usata una mutex al momento di invio del messaggio
