@@ -10,7 +10,6 @@ void LightTask(void* param) {
     LightSensor* lightSensor = new LightSensor(LIGHT_SENSOR_PIN);
     for(;;) {
         while(xSemaphoreTake(dayMutex, 100) == pdFALSE){
-            Serial.println("mutex not taken, delaying for 1 sec");
             delay(1000);
         }
         isDay = lightSensor->isDay();

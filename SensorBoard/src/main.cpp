@@ -33,30 +33,18 @@ volatile bool isDay = false;
 volatile bool isPresenceDetected = false;
 
 void setup_wifi() {
-
-    Serial.println(String("Connecting to ") + ssid);
-    Serial.flush();
-
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
 
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
-        Serial.print(".");
     }
-
-    Serial.println("");
-    Serial.println("WiFi connected");
-    Serial.println("IP address: ");
-    Serial.println(WiFi.localIP());
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
-    Serial.println(String("Message arrived on [") + topic + "] len: " + length );
 }
 
 void setup() {
-    Serial.begin(9600);
     setup_wifi();
     randomSeed(micros());
     client->setServer(mqtt_server, 1883);
@@ -64,7 +52,6 @@ void setup() {
     dayMutex = xSemaphoreCreateMutex();
     presenceMutex = xSemaphoreCreateMutex();
     if (dayMutex == NULL || presenceMutex == NULL) {
-        Serial.println("failed to create mutex, quitting");
         exit(1);
     }
     xTaskCreatePinnedToCore(LightTask, "LightTask", 10000, NULL, 1, &Task1, 0);
@@ -86,16 +73,12 @@ void loop() {
     }
     currPresence = isPresenceDetected;
     xSemaphoreGive(presenceMutex);
-    // Serial.println("Sensor data obtained, publishing to topic");
     char msg[MSG_BUFFER_SIZE];
     DynamicJsonDocument doc(128);
     doc["day"] = currDay;
     doc["presence"] = currPresence;
     serializeJson(doc, msg);
-    serializeJson(doc, Serial);
-    Serial.print('\n');
     while (!client->connected()) {
-        Serial.print("Attempting MQTT connection...");
         Serial.flush();
         
         // Create a random client ID
@@ -103,10 +86,7 @@ void loop() {
 
         // Attempt to connect
         if (client->connect(clientId.c_str())) {
-            Serial.println("connected");
         } else {
-            Serial.print("failed, rc=");
-            Serial.println(client->state());
             delay(500);
         }
     }
