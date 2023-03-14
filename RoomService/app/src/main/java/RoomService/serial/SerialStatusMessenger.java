@@ -1,5 +1,7 @@
 package RoomService.serial;
 
+import java.util.Optional;
+import com.google.gson.Gson;
 import RoomService.devices.actuators.LightImpl.LightStatus;
 import RoomService.devices.actuators.RollerBlindsImpl.RollerBlindStatus;
 
@@ -36,5 +38,19 @@ public class SerialStatusMessenger {
 		final String msg = this.generator.createCommand(status);
 		this.channel.sendMsg(msg);
 		return msg;
+	}
+	
+	/**
+	 * Receives data from the serial channel.
+	 * @return {@link Optional} containing {@link RoomControllerData} if a message
+	 * 		   was available, empty otherwise.
+	 * @throws Exception
+	 */
+	public Optional<RoomControllerData> receiveData() throws Exception{
+		final Gson gson = new Gson();
+		if (this.channel.isMsgAvailable()) {
+			return Optional.of(gson.fromJson(this.channel.receiveMsg(), RoomControllerData.class));
+		}
+		return Optional.empty();
 	}
 }

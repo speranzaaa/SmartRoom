@@ -14,5 +14,11 @@ public interface Room {
 	Device getDevice(String deviceName);
 	
 	Map<String, Device> getDevices();
+	
+	/**
+	 * Updates the room's actuators' statuses with the data
+	 * received from the serial port.
+	 */
+	void updateFromSerial();
 
 }
