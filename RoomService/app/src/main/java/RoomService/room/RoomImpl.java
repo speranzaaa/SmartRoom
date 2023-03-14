@@ -61,8 +61,14 @@ public class RoomImpl implements Room {
 			received.ifPresent(x -> {
 				final Light light = (Light)this.getDevice("lights-subgroup");
 				final RollerBlinds rollerBlinds = (RollerBlinds)this.getDevice("rollerblinds-subgroup");
-				light.turnOn(x.getLight());
-				rollerBlinds.setTo(x.getServo());
+				if (x.getLight() && !light.isOn()) {
+					light.turnOn(true);
+				} else if (!x.getLight() && light.isOn()) {
+					light.turnOn(false);
+				}
+				if (rollerBlinds.getOpenPercentage() != x.getServo()) {
+					rollerBlinds.setTo(x.getServo());
+				}
 			});
 		} catch (Exception e) {
 			e.printStackTrace();

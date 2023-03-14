@@ -28,5 +28,10 @@ public class RoomControllerData {
 	public void setServo(int servo) {
 		this.Servo = servo;
 	}
+
+	@Override
+	public String toString() {
+		return "RoomControllerData [Light=" + Light + ", Servo=" + Servo + "]";
+	}
 	
 }
