@@ -14,6 +14,7 @@ import RoomService.logic.LogicControllerImpl;
 import RoomService.mqtt.MQTTAgent;
 import RoomService.room.Room;
 import RoomService.room.RoomImpl;
+import RoomService.serial.SerialUpdater;
 import RoomService.utils.PortablePathBuilder;
 import io.vertx.core.Vertx;
 import RoomService.dashboardServer.DashboardServer;
@@ -21,7 +22,7 @@ import RoomService.dashboardServer.SSEMessageImpl;
 
 public class App {
 	
-	final static int PORT = 80;
+	final static int PORT = 8080;
 	final static String ROOM_ACTIVITIES_LOG_PATH = PortablePathBuilder
 			.fromStringPath("src/main/resources/roomActivities/activityLog.json")
 			.build();
@@ -54,7 +55,7 @@ public class App {
     	
     // ---------- ROOM MODEL ----------
     	try {
-    		Room room = new RoomImpl(activityLogger);
+    		final Room room = new RoomImpl(activityLogger);
     		room.addActuator(lightsSubgroup);
     		room.addActuator(rollerblindsSubgroup);
     		
@@ -69,6 +70,10 @@ public class App {
     		Vertx vertx = Vertx.vertx();
     		MQTTAgent agent = new MQTTAgent(logicController);
     		vertx.deployVerticle(agent);
+    		
+    		// ------ UPDATE ROOM SERVICE DATA FROM SERIAL --------
+    		final SerialUpdater updater = new SerialUpdater(room);
+    		updater.start();
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
