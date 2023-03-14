@@ -34,7 +34,6 @@ void SerialTask::tick() {
       this->room->setServoOpening(doc["deviceValue"]);
     }
   }
-  // This is for testing ?
-  this->write(this->room->getLedState(), this->room->getServoOpening());
+  // this->write(this->room->getLedState(), this->room->getServoOpening());
   delete msg;
 }

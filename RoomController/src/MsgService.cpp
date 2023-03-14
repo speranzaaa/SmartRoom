@@ -16,6 +16,7 @@ void MsgService::readSerial() {
 
 void MsgService::init() {
     Serial.begin(9600);
+    while (!Serial) {}
     this->content.reserve(256);
     this->content = "";
     this->currentMsg = NULL;
