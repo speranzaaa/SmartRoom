@@ -41,14 +41,11 @@ void setup_wifi() {
     }
 }
 
-void callback(char* topic, byte* payload, unsigned int length) {
-}
 
 void setup() {
     setup_wifi();
     randomSeed(micros());
     client->setServer(mqtt_server, 1883);
-    client->setCallback(callback);
     dayMutex = xSemaphoreCreateMutex();
     presenceMutex = xSemaphoreCreateMutex();
     if (dayMutex == NULL || presenceMutex == NULL) {
