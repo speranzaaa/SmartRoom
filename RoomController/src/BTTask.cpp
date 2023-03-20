@@ -16,7 +16,7 @@ BTTask::BTTask(int rxPin, int txPin, MsgService* service, SmartRoom* smartRoom, 
   
 void BTTask::init(int period){
   Task::init(period);
-  channel = new SoftwareSerial(rxPin, txPin);
+  channel = new SoftwareSerial(txPin, rxPin);
   channel->begin(9600);
 }
   
