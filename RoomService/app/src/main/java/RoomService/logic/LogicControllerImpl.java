@@ -38,7 +38,7 @@ public class LogicControllerImpl implements LogicController {
 	private void updateLights(boolean presence) {
 		Light lightsSubgroup = (Light) this.room.getDevice("lights-subgroup");
 		// If no one is in the room turn off the light
-		if (!presence) {
+		if (!presence && lightsSubgroup.isOn()) {
 			lightsSubgroup.turnOn(false);
 			System.out.println("No one in the room, turning off lights.");
 		} else if (!lightsSubgroup.isOn()) {
