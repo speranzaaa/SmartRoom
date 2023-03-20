@@ -12,7 +12,6 @@ SerialTask::SerialTask(SmartRoom* smartRoom, MsgService* service) {
 } 
 
 void SerialTask::init(int period) {
-  this->service->init();
   Task::init(period);
 }
 
