@@ -72,7 +72,7 @@ public class LightUsageAnalyzer implements UsageAnalyzer {
 			case HOUR:
 				return String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
 			case DAY_OF_WEEK:
-				return DAYS.values()[cal.get(Calendar.DAY_OF_WEEK)].toString();
+				return DAYS.values()[cal.get(Calendar.DAY_OF_WEEK)-1].toString();
 			case DAY:
 				return cal.get(Calendar.DATE) + "/" +  (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR);
 			case MONTH:
@@ -104,7 +104,9 @@ public class LightUsageAnalyzer implements UsageAnalyzer {
 				return this.toDate == null ? true : activity.getTimestamp().before(this.toDate);
 			}).collect(Collectors.groupingBy(activity->classificate(activity)));
 		
-		dividedActivities.keySet().forEach((key->{
+		System.out.println(dividedActivities);
+		
+		dividedActivities.keySet().stream().forEachOrdered((key->{
 			activitySeconds = 0;
 			turnOnTimestamp = 0;
 			lastWasOn = false;
@@ -126,12 +128,12 @@ public class LightUsageAnalyzer implements UsageAnalyzer {
 	}
 	
 	private enum DAYS {
+		SUNDAY,
 		MONDAY,
 		TUESDAY,
 		WEDNESDAY,
 		THURSDAY,
 		FRIDAY,
-		SATURDAY,
-		SUNDAY
+		SATURDAY
 	}
 }
