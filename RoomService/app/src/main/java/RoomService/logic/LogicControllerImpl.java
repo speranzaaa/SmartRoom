@@ -25,6 +25,7 @@ public class LogicControllerImpl implements LogicController {
 	
 	@Override
 	public void updateRoom(final SensorBoardData data) {
+		System.out.println("Received: " + data.toString());
 		// Control the lights
 		this.updateLights(data);
 		// Control the blinds
