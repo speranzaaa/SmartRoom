@@ -11,8 +11,7 @@ bool BTReceiving;
 
 Scheduler scheduler;
 
-void setup(){
-
+void setup() {
   MsgService* service = new MsgService();
   service->init();
 
@@ -29,10 +28,9 @@ void setup(){
   scheduler.init(SCHEDULER_PERIOD);
   
   scheduler.addTask(bttask);
-
   scheduler.addTask(serialTask);
 }
 
-void loop(){
+void loop() {
   scheduler.schedule();
 }

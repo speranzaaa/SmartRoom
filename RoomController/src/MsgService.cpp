@@ -2,6 +2,15 @@
 #include "MsgService.h"
 #include "ArduinoJson.h"
 
+void MsgService::init() {
+    Serial.begin(9600);
+    while (!Serial) {}
+    this->content.reserve(256);
+    this->content = "";
+    this->currentMsg = NULL;
+    this->messageAvailable = false;
+}
+
 void MsgService::readSerial() {
    while(Serial.available()) {
     char ch = (char)Serial.read();
@@ -12,15 +21,6 @@ void MsgService::readSerial() {
       this->content += ch;
     }
   }
-}
-
-void MsgService::init() {
-    Serial.begin(9600);
-    while (!Serial) {}
-    this->content.reserve(256);
-    this->content = "";
-    this->currentMsg = NULL;
-    this->messageAvailable = false;
 }
 
 void MsgService::sendMsg(bool ledState, int servoOpening) {

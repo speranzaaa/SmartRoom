@@ -16,6 +16,6 @@ public:
 
   void setServoOpening(int percentage);
   int getServoOpening();
-
 };
+
 #endif

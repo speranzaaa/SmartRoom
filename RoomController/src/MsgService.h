@@ -5,7 +5,6 @@
 #include "ArduinoJson.h"
 
 class Msg {
-
 private:
     String msg;
 
@@ -28,6 +27,7 @@ public:
     void sendMsg(String msg);
     bool isMessageAvailable();
     Msg* receiveMsg();
+    
     Msg* currentMsg;
     bool messageAvailable;
 };

@@ -33,6 +33,5 @@ void SerialTask::tick() {
       this->room->setServoOpening(doc["deviceValue"]);
     }
  }
-  // this->write(this->room->getLedState(), this->room->getServoOpening());
   delete msg;
 }

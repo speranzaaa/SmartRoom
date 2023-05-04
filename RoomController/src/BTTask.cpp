@@ -4,7 +4,6 @@
 #include <ArduinoJson.h>
 #include "MsgService.h"
 
-
 BTTask::BTTask(int rxPin, int txPin, MsgService* service, SmartRoom* smartRoom, int disconnectionTimer) {
   this->txPin = txPin;
   this->rxPin = rxPin;
@@ -14,20 +13,20 @@ BTTask::BTTask(int rxPin, int txPin, MsgService* service, SmartRoom* smartRoom, 
   this->currentDiscTimer = disconnectionTimer;
 }
   
-void BTTask::init(int period){
+void BTTask::init(int period) {
   Task::init(period);
   channel = new SoftwareSerial(txPin, rxPin);
   channel->begin(9600);
 }
   
-void BTTask::tick(){
-  if(channel->available()){
+void BTTask::tick() {
+  if(channel->available()) {
     this->currentDiscTimer = this->disconnectionTimer;
     BTReceiving = true;
     char msgChar = (char)channel->read();
     String msg = "";
     
-    while(msgChar != '\n'){
+    while(msgChar != '\n') {
       msg.concat(msgChar);
       msgChar = (char)channel->read();
     }
@@ -42,17 +41,17 @@ void BTTask::tick(){
     } 
 
     int servoOpening = doc["RollerBlinds"];
-    if(servoOpening >= 0 && servoOpening <= 100){
+    if(servoOpening >= 0 && servoOpening <= 100) {
       smartRoom->setServoOpening(servoOpening);
     }
 
     service->sendMsg(smartRoom->getLedState(), smartRoom->getServoOpening());
   }
-  else{
+  else {
     if(this->currentDiscTimer == 0){
       BTReceiving = false;
     }
-    else{
+    else {
       this->currentDiscTimer--;
     }
   }

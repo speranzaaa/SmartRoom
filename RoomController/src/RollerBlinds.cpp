@@ -1,6 +1,6 @@
 #include "RollerBlinds.h"
 
-RollerBlinds::RollerBlinds(const int pin) : Component(pin) , Servo(){
+RollerBlinds::RollerBlinds(const int pin) : Component(pin) , Servo() {
     this->attach(pin);
 }
 
@@ -14,6 +14,6 @@ int RollerBlinds::getAngle() {
   return this->angle;
 }
 
-int RollerBlinds::getOpeningPercentage(){
+int RollerBlinds::getOpeningPercentage() {
   return (this->angle*100)/180;
   }

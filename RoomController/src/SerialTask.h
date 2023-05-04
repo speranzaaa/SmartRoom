@@ -6,7 +6,6 @@
 #include "MsgService.h"
 
 class SerialTask : public Task {
-  
   public: 
     SmartRoom* room;
     MsgService* service;

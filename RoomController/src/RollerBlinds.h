@@ -7,7 +7,6 @@
 
 
 class RollerBlinds : public Component, public Servo {
-  
   int angle = 0;
 
   public:
@@ -15,7 +14,6 @@ class RollerBlinds : public Component, public Servo {
     void move(int percentage);
     int getAngle();
     int getOpeningPercentage();
-    
 };
 
 #endif
